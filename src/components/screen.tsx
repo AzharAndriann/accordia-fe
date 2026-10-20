@@ -1,5 +1,6 @@
 import type { PropsWithChildren } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type ScreenProps = PropsWithChildren<{ title: string; description?: string }>;
 
