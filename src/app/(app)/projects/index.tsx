@@ -130,7 +130,7 @@ function ProjectCard({ project, onPress }: { project: ProjectSummary; onPress: (
 
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: '#F4F7F6' },
-  content: { paddingHorizontal: 20, paddingBottom: 36, gap: 14 },
+  content: { paddingHorizontal: 20, paddingBottom: 118, gap: 14 },
   emptyContent: { flexGrow: 1 },
   header: { paddingTop: 22, paddingBottom: 10, gap: 20 },
   headerCopy: { gap: 6 },

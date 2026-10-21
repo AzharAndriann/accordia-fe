@@ -1,58 +1,91 @@
-import { useQuery } from '@tanstack/react-query';
-import { Link } from 'expo-router';
-import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Screen } from '@/components/screen';
-import { checkHealth } from '@/lib/api';
+import { getCurrentUser } from '@/lib/session';
 
-export default function BootstrapScreen() {
-  const health = useQuery({ queryKey: ['public', 'health'], queryFn: checkHealth });
+export default function HomeScreen() {
+  const router = useRouter();
+  const currentUser = getCurrentUser();
+  const firstName = currentUser?.name.trim().split(/\s+/)[0];
 
   return (
-    <Screen
-      title="Accordia"
-      description="Fondasi aplikasi mobile freelancer dan klien sudah siap."
-    >
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Koneksi backend</Text>
-        {health.isPending ? <ActivityIndicator color="#176B5B" /> : null}
-        {health.isSuccess ? (
-          <Text style={styles.success}>API terhubung: {health.data.data.status}</Text>
-        ) : null}
-        {health.isError ? (
-          <>
-            <Text style={styles.error}>{health.error.message}</Text>
-            <Pressable accessibilityRole="button" onPress={() => health.refetch()} style={styles.secondaryButton}>
-              <Text style={styles.secondaryButtonText}>Coba lagi</Text>
-            </Pressable>
-          </>
-        ) : null}
-      </View>
+    <SafeAreaView edges={['top']} style={styles.safeArea}>
+      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        <View style={styles.heading}>
+          <Text style={styles.eyebrow}>ACCORDIA</Text>
+          <Text style={styles.title}>{firstName ? `Halo, ${firstName}` : 'Halo'}</Text>
+          <Text style={styles.description}>Lanjutkan pekerjaan dan kesepakatanmu hari ini.</Text>
+        </View>
 
-      <View style={styles.actions}>
-        <Link href="/(auth)/login" asChild>
-          <Pressable accessibilityRole="button" style={styles.primaryButton}>
-            <Text style={styles.primaryButtonText}>Masuk</Text>
+        <View style={styles.heroCard}>
+          <View style={styles.heroDecoration} />
+          <Text style={styles.heroLabel}>RUANG KERJA BERSAMA</Text>
+          <Text style={styles.heroTitle}>Kesepakatan jelas, kerja lebih tenang.</Text>
+          <Pressable
+            accessibilityRole="button"
+            onPress={() => router.push('/(app)/projects')}
+            style={({ pressed }) => [styles.heroButton, pressed ? styles.pressed : null]}
+          >
+            <Text style={styles.heroButtonText}>Lihat proyek</Text>
+            <Text style={styles.heroArrow}>›</Text>
           </Pressable>
-        </Link>
-        <Link href="/(app)/projects" asChild>
-          <Pressable accessibilityRole="button" style={styles.secondaryButton}>
-            <Text style={styles.secondaryButtonText}>Lihat route proyek</Text>
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Akses cepat</Text>
+          <Pressable
+            onPress={() => router.push('/(app)/projects')}
+            style={({ pressed }) => [styles.quickCard, pressed ? styles.pressed : null]}
+          >
+            <View style={styles.quickIcon}><Text style={styles.quickIconText}>▤</Text></View>
+            <View style={styles.quickCopy}>
+              <Text style={styles.quickTitle}>Semua proyek</Text>
+              <Text style={styles.quickDescription}>Lihat progres dan detail pekerjaanmu.</Text>
+            </View>
+            <Text style={styles.quickArrow}>›</Text>
           </Pressable>
-        </Link>
-      </View>
-    </Screen>
+          {currentUser?.role === 'FREELANCER' ? (
+            <Pressable
+              onPress={() => router.push('/(app)/projects/new')}
+              style={({ pressed }) => [styles.quickCard, pressed ? styles.pressed : null]}
+            >
+              <View style={styles.quickIcon}><Text style={styles.quickIconText}>＋</Text></View>
+              <View style={styles.quickCopy}>
+                <Text style={styles.quickTitle}>Buat proyek</Text>
+                <Text style={styles.quickDescription}>Mulai ruang kerja baru bersama klien.</Text>
+              </View>
+              <Text style={styles.quickArrow}>›</Text>
+            </Pressable>
+          ) : null}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  card: { padding: 20, borderRadius: 16, backgroundColor: '#FFFFFF', gap: 12 },
-  cardTitle: { color: '#17202A', fontSize: 18, fontWeight: '700' },
-  success: { color: '#176B5B', fontSize: 15 },
-  error: { color: '#A93226', fontSize: 15, lineHeight: 22 },
-  actions: { gap: 12 },
-  primaryButton: { borderRadius: 12, backgroundColor: '#176B5B', padding: 15, alignItems: 'center' },
-  primaryButtonText: { color: '#FFFFFF', fontSize: 16, fontWeight: '700' },
-  secondaryButton: { borderWidth: 1, borderColor: '#176B5B', borderRadius: 12, padding: 14, alignItems: 'center' },
-  secondaryButtonText: { color: '#176B5B', fontSize: 15, fontWeight: '600' },
+  safeArea: { flex: 1, backgroundColor: '#F4F7F6' },
+  content: { padding: 20, paddingTop: 24, paddingBottom: 120, gap: 24 },
+  heading: { gap: 6 },
+  eyebrow: { color: '#408274', fontSize: 11, fontWeight: '800', letterSpacing: 1.7 },
+  title: { color: '#142B27', fontSize: 32, lineHeight: 39, fontWeight: '800', letterSpacing: -0.8 },
+  description: { color: '#687975', fontSize: 14, lineHeight: 21 },
+  heroCard: { minHeight: 225, borderRadius: 26, backgroundColor: '#176B5B', padding: 22, justifyContent: 'flex-end', gap: 10, overflow: 'hidden' },
+  heroDecoration: { position: 'absolute', width: 210, height: 210, borderRadius: 105, backgroundColor: '#2A8976', top: -100, right: -70 },
+  heroLabel: { color: '#A9D7CD', fontSize: 10, fontWeight: '800', letterSpacing: 1.4 },
+  heroTitle: { color: '#FFFFFF', maxWidth: 280, fontSize: 24, lineHeight: 31, fontWeight: '800', letterSpacing: -0.5 },
+  heroButton: { alignSelf: 'flex-start', minHeight: 42, borderRadius: 21, backgroundColor: '#FFFFFF', paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 4 },
+  heroButtonText: { color: '#176B5B', fontSize: 13, fontWeight: '800' },
+  heroArrow: { color: '#176B5B', fontSize: 21 },
+  pressed: { opacity: 0.76, transform: [{ scale: 0.99 }] },
+  section: { gap: 11 },
+  sectionTitle: { color: '#19332E', fontSize: 18, fontWeight: '800' },
+  quickCard: { borderWidth: 1, borderColor: '#E0E8E6', borderRadius: 18, backgroundColor: '#FFFFFF', padding: 15, flexDirection: 'row', alignItems: 'center', gap: 13 },
+  quickIcon: { width: 44, height: 44, borderRadius: 14, backgroundColor: '#E2F2ED', alignItems: 'center', justifyContent: 'center' },
+  quickIconText: { color: '#176B5B', fontSize: 21, fontWeight: '800' },
+  quickCopy: { flex: 1, gap: 3 },
+  quickTitle: { color: '#19332E', fontSize: 14, fontWeight: '800' },
+  quickDescription: { color: '#74837F', fontSize: 12, lineHeight: 17 },
+  quickArrow: { color: '#176B5B', fontSize: 24 },
 });
