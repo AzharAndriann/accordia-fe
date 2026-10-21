@@ -4,6 +4,14 @@ import { Platform } from 'react-native';
 const REFRESH_TOKEN_KEY = 'accordia.refresh-token';
 let accessToken: string | null = null;
 let webRefreshToken: string | null = null;
+let currentUser: CurrentUser | null = null;
+
+export type CurrentUser = {
+  id: string;
+  email: string;
+  name: string;
+  role: 'FREELANCER' | 'CLIENT';
+};
 
 export function getAccessToken() {
   return accessToken;
@@ -11,6 +19,14 @@ export function getAccessToken() {
 
 export function setAccessToken(token: string | null) {
   accessToken = token;
+}
+
+export function getCurrentUser() {
+  return currentUser;
+}
+
+export function setCurrentUser(user: CurrentUser | null) {
+  currentUser = user;
 }
 
 export async function getRefreshToken() {
@@ -29,5 +45,6 @@ export async function setRefreshToken(token: string | null) {
 
 export async function clearSession() {
   setAccessToken(null);
+  setCurrentUser(null);
   await setRefreshToken(null);
 }
