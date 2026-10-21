@@ -16,7 +16,7 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <StatusBar style="dark" />
-      <Stack screenOptions={{ headerBackTitle: 'Kembali' }}>
+      <Stack screenOptions={{ headerBackButtonDisplayMode: 'minimal', headerBackTitle: '' }}>
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="(app)" options={{ headerShown: false }} />
