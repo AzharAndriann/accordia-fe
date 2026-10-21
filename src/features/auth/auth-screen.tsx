@@ -1,5 +1,6 @@
 import type { PropsWithChildren, ReactNode } from 'react';
 import {
+  Image,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -7,15 +8,70 @@ import {
   Text,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type AuthScreenProps = PropsWithChildren<{
   title: string;
   description: string;
   footer: ReactNode;
+  variant?: 'card' | 'hero';
 }>;
 
-export function AuthScreen({ title, description, footer, children }: AuthScreenProps) {
+export function AuthScreen({
+  title,
+  description,
+  footer,
+  children,
+  variant = 'card',
+}: AuthScreenProps) {
+  const insets = useSafeAreaInsets();
+
+  if (variant === 'hero') {
+    return (
+      <View style={styles.heroSafeArea}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          style={styles.keyboardView}
+        >
+          <ScrollView
+            contentContainerStyle={styles.heroContent}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={[styles.heroHeader, { height: 265 + insets.top }]}>
+              <Image
+                pointerEvents="none"
+                resizeMode="stretch"
+                source={require('../../../assets/images/accordia-auth-hero.png')}
+                style={styles.heroBackground}
+              />
+              <View style={[styles.heroBrand, { marginTop: 24 + insets.top }]}>
+                <View style={styles.heroLogoHalo}>
+                  <Image
+                    accessibilityIgnoresInvertColors
+                    resizeMode="contain"
+                    source={require('../../../assets/images/accordia-splash-mark.png')}
+                    style={styles.heroLogo}
+                  />
+                </View>
+                <Text style={styles.heroBrandName}>accordia</Text>
+              </View>
+            </View>
+
+            <View style={styles.heroBody}>
+              <View style={styles.heroHeading}>
+                <Text style={styles.heroTitle}>{title}</Text>
+                <Text style={styles.heroDescription}>{description}</Text>
+              </View>
+              <View style={styles.heroForm}>{children}</View>
+              <View style={styles.heroFooter}>{footer}</View>
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </View>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View pointerEvents="none" style={styles.decorationTop} />
@@ -53,6 +109,65 @@ export function AuthScreen({ title, description, footer, children }: AuthScreenP
 }
 
 const styles = StyleSheet.create({
+  heroSafeArea: { flex: 1, backgroundColor: '#176B5B' },
+  heroContent: { flexGrow: 1, backgroundColor: '#FFFFFF' },
+  heroHeader: {
+    height: 265,
+    overflow: 'hidden',
+    backgroundColor: '#176B5B',
+    alignItems: 'center',
+  },
+  heroBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+  },
+  heroBrand: { alignItems: 'center', zIndex: 2 },
+  heroLogoHalo: {
+    width: 76,
+    height: 76,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  heroLogo: { width: 72, height: 72 },
+  heroBrandName: {
+    color: '#FFFFFF',
+    fontSize: 21,
+    fontWeight: '800',
+    letterSpacing: -0.5,
+    marginTop: 2,
+  },
+  heroBody: {
+    flexGrow: 1,
+    alignSelf: 'center',
+    width: '100%',
+    maxWidth: 520,
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 26,
+    paddingTop: 6,
+    paddingBottom: 32,
+  },
+  heroHeading: { alignItems: 'center', marginBottom: 24 },
+  heroTitle: {
+    color: '#142B27',
+    fontSize: 25,
+    lineHeight: 32,
+    fontWeight: '800',
+    letterSpacing: -0.7,
+    textAlign: 'center',
+  },
+  heroDescription: {
+    color: '#6C7D79',
+    fontSize: 14,
+    lineHeight: 21,
+    marginTop: 7,
+    maxWidth: 350,
+    textAlign: 'center',
+  },
+  heroForm: { gap: 18 },
+  heroFooter: { alignItems: 'center', marginTop: 24 },
   safeArea: { flex: 1, backgroundColor: '#F5F8F7' },
   keyboardView: { flex: 1 },
   content: {

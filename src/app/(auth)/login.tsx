@@ -39,8 +39,9 @@ export default function LoginScreen() {
 
   return (
     <AuthScreen
-      title="Selamat datang kembali"
-      description="Masuk untuk melanjutkan proyek, kesepakatan, dan pembayaranmu."
+      title="Senang bertemu lagi!"
+      description="Masuk dan lanjutkan kolaborasimu."
+      variant="hero"
       footer={
         <View style={styles.footerRow}>
           <Text style={styles.footerText}>Belum punya akun?</Text>
