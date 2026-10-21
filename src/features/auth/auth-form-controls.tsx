@@ -1,6 +1,8 @@
 import type { ComponentProps } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
+import type { AuthRole } from './auth.schema';
+
 type FormFieldProps = ComponentProps<typeof TextInput> & {
   label: string;
   error?: string;
@@ -87,6 +89,67 @@ export function FormError({ message }: { message?: string }) {
   );
 }
 
+type RoleFieldProps = {
+  value?: AuthRole;
+  onChange: (role: AuthRole) => void;
+  error?: string;
+};
+
+const roleOptions: { value: AuthRole; label: string; description: string }[] = [
+  {
+    value: 'FREELANCER',
+    label: 'Freelancer',
+    description: 'Saya mengelola pekerjaan dan mengundang klien.',
+  },
+  {
+    value: 'CLIENT',
+    label: 'Klien',
+    description: 'Saya bekerja sama dan menyetujui pekerjaan.',
+  },
+];
+
+export function RoleField({ value, onChange, error }: RoleFieldProps) {
+  return (
+    <View style={styles.fieldGroup}>
+      <Text style={styles.label}>Daftar sebagai</Text>
+      <View accessibilityRole="radiogroup" style={styles.roleOptions}>
+        {roleOptions.map((option) => {
+          const selected = value === option.value;
+
+          return (
+            <Pressable
+              accessibilityRole="radio"
+              accessibilityState={{ checked: selected }}
+              key={option.value}
+              onPress={() => onChange(option.value)}
+              style={({ pressed }) => [
+                styles.roleOption,
+                selected ? styles.roleOptionSelected : null,
+                pressed ? styles.roleOptionPressed : null,
+              ]}
+            >
+              <View style={[styles.radio, selected ? styles.radioSelected : null]}>
+                {selected ? <View style={styles.radioDot} /> : null}
+              </View>
+              <View style={styles.roleCopy}>
+                <Text style={[styles.roleLabel, selected ? styles.roleLabelSelected : null]}>
+                  {option.label}
+                </Text>
+                <Text style={styles.roleDescription}>{option.description}</Text>
+              </View>
+            </Pressable>
+          );
+        })}
+      </View>
+      {error ? (
+        <Text accessibilityRole="alert" style={styles.errorText}>
+          {error}
+        </Text>
+      ) : null}
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   fieldGroup: { gap: 7 },
   label: { color: '#253B37', fontSize: 14, fontWeight: '700' },
@@ -129,4 +192,34 @@ const styles = StyleSheet.create({
   },
   formErrorDot: { width: 7, height: 7, borderRadius: 4, backgroundColor: '#B43F3F', marginTop: 6 },
   formErrorText: { flex: 1, color: '#8F3030', fontSize: 13, lineHeight: 19 },
+  roleOptions: { gap: 10 },
+  roleOption: {
+    minHeight: 68,
+    borderWidth: 1,
+    borderColor: '#D8E1DF',
+    borderRadius: 14,
+    backgroundColor: '#FAFCFB',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 11,
+  },
+  roleOptionSelected: { borderColor: '#176B5B', backgroundColor: '#F0F8F5' },
+  roleOptionPressed: { opacity: 0.82 },
+  radio: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#AAB7B4',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  radioSelected: { borderColor: '#176B5B' },
+  radioDot: { width: 10, height: 10, borderRadius: 5, backgroundColor: '#176B5B' },
+  roleCopy: { flex: 1, gap: 2 },
+  roleLabel: { color: '#253B37', fontSize: 14, fontWeight: '700' },
+  roleLabelSelected: { color: '#115448' },
+  roleDescription: { color: '#687975', fontSize: 12, lineHeight: 17 },
 });

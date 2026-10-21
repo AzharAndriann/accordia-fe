@@ -11,10 +11,19 @@ cp .env.example .env
 bun install
 bun run doctor
 bun run typecheck
+bun run ios
+```
+
+`bun run ios` membuat dan memasang development build ke iOS Simulator. Setelah
+development build sudah terpasang, penggunaan sehari-hari cukup jalankan:
+
+```bash
 bun run start
 ```
 
-Untuk menjalankan target tertentu:
+Lalu tekan `i` pada terminal Expo untuk membuka aplikasi di iOS Simulator.
+
+Perintah target yang tersedia:
 
 ```bash
 bun run android

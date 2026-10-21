@@ -7,7 +7,12 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { ApiError } from '@/lib/api';
 import { AuthScreen } from '@/features/auth/auth-screen';
-import { FormError, FormField, SubmitButton } from '@/features/auth/auth-form-controls';
+import {
+  FormError,
+  FormField,
+  RoleField,
+  SubmitButton,
+} from '@/features/auth/auth-form-controls';
 import { register, registerSchema, saveAuthSession, type RegisterForm } from '@/features/auth';
 
 export default function RegisterScreen() {
@@ -20,7 +25,12 @@ export default function RegisterScreen() {
     formState: { errors },
   } = useForm<RegisterForm>({
     resolver: zodResolver(registerSchema),
-    defaultValues: { name: '', email: '', password: '', confirmPassword: '' },
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
   });
 
   const registerMutation = useMutation({
@@ -89,6 +99,14 @@ export default function RegisterScreen() {
             returnKeyType="next"
             value={value}
           />
+        )}
+      />
+
+      <Controller
+        control={control}
+        name="role"
+        render={({ field: { onChange, value } }) => (
+          <RoleField error={errors.role?.message} onChange={onChange} value={value} />
         )}
       />
 
