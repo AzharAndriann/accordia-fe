@@ -2,6 +2,8 @@ import type { PropsWithChildren } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { colors } from '@/theme';
+
 type ScreenProps = PropsWithChildren<{ title: string; description?: string }>;
 
 export function Screen({ title, description, children }: ScreenProps) {
@@ -19,9 +21,9 @@ export function Screen({ title, description, children }: ScreenProps) {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#F7F8FA' },
+  safeArea: { flex: 1, backgroundColor: colors.background },
   content: { flexGrow: 1, padding: 24, gap: 20 },
   heading: { gap: 8 },
-  title: { color: '#17202A', fontSize: 30, fontWeight: '700' },
-  description: { color: '#5D6D7E', fontSize: 16, lineHeight: 24 },
+  title: { color: colors.ink, fontSize: 30, fontWeight: '700' },
+  description: { color: colors.textMuted, fontSize: 16, lineHeight: 24 },
 });

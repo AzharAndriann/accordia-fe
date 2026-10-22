@@ -2,6 +2,7 @@ import type { ComponentProps } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import type { AuthRole } from './auth.schema';
+import { colors } from '@/theme';
 
 type FormFieldProps = ComponentProps<typeof TextInput> & {
   label: string;
@@ -27,9 +28,9 @@ export function FormField({
         <TextInput
           {...inputProps}
           accessibilityLabel={label}
-          placeholderTextColor="#99A6A3"
+          placeholderTextColor={colors.placeholder}
           secureTextEntry={isPassword && !passwordVisible}
-          selectionColor="#176B5B"
+          selectionColor={colors.primary}
           style={[styles.input, isPassword ? styles.passwordInput : null, style]}
         />
         {isPassword ? (
@@ -72,7 +73,7 @@ export function SubmitButton({ label, loadingLabel, isLoading, onPress }: Submit
         isLoading ? styles.submitDisabled : null,
       ]}
     >
-      {isLoading ? <ActivityIndicator color="#FFFFFF" size="small" /> : null}
+      {isLoading ? <ActivityIndicator color={colors.white} size="small" /> : null}
       <Text style={styles.submitText}>{isLoading ? loadingLabel : label}</Text>
     </Pressable>
   );
@@ -152,74 +153,74 @@ export function RoleField({ value, onChange, error }: RoleFieldProps) {
 
 const styles = StyleSheet.create({
   fieldGroup: { gap: 7 },
-  label: { color: '#253B37', fontSize: 14, fontWeight: '700' },
+  label: { color: colors.inkSoft, fontSize: 14, fontWeight: '700' },
   inputShell: {
     minHeight: 54,
     borderWidth: 1,
-    borderColor: '#D8E1DF',
+    borderColor: colors.borderStrong,
     borderRadius: 14,
-    backgroundColor: '#FAFCFB',
+    backgroundColor: colors.surfaceMuted,
     flexDirection: 'row',
     alignItems: 'center',
   },
-  inputShellError: { borderColor: '#C94F4F', backgroundColor: '#FFF9F9' },
-  input: { flex: 1, color: '#152B27', fontSize: 16, paddingHorizontal: 15, paddingVertical: 14 },
+  inputShellError: { borderColor: colors.dangerBorder, backgroundColor: colors.dangerSurface },
+  input: { flex: 1, color: colors.ink, fontSize: 16, paddingHorizontal: 15, paddingVertical: 14 },
   passwordInput: { paddingRight: 4 },
   visibilityButton: { paddingHorizontal: 15, paddingVertical: 12 },
-  visibilityText: { color: '#176B5B', fontSize: 13, fontWeight: '800' },
-  errorText: { color: '#AD3D3D', fontSize: 12, lineHeight: 17 },
+  visibilityText: { color: colors.primary, fontSize: 13, fontWeight: '800' },
+  errorText: { color: colors.danger, fontSize: 12, lineHeight: 17 },
   submitButton: {
     minHeight: 54,
     borderRadius: 14,
-    backgroundColor: '#176B5B',
+    backgroundColor: colors.primary,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
     marginTop: 2,
   },
-  submitPressed: { backgroundColor: '#115448', transform: [{ scale: 0.99 }] },
+  submitPressed: { backgroundColor: colors.primaryPressed, transform: [{ scale: 0.99 }] },
   submitDisabled: { opacity: 0.72 },
-  submitText: { color: '#FFFFFF', fontSize: 16, fontWeight: '800' },
+  submitText: { color: colors.white, fontSize: 16, fontWeight: '800' },
   formError: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 9,
     borderRadius: 12,
-    backgroundColor: '#FFF1F1',
+    backgroundColor: colors.dangerSurface,
     paddingHorizontal: 13,
     paddingVertical: 11,
   },
-  formErrorDot: { width: 7, height: 7, borderRadius: 4, backgroundColor: '#B43F3F', marginTop: 6 },
-  formErrorText: { flex: 1, color: '#8F3030', fontSize: 13, lineHeight: 19 },
+  formErrorDot: { width: 7, height: 7, borderRadius: 4, backgroundColor: colors.danger, marginTop: 6 },
+  formErrorText: { flex: 1, color: colors.dangerStrong, fontSize: 13, lineHeight: 19 },
   roleOptions: { gap: 10 },
   roleOption: {
     minHeight: 68,
     borderWidth: 1,
-    borderColor: '#D8E1DF',
+    borderColor: colors.borderStrong,
     borderRadius: 14,
-    backgroundColor: '#FAFCFB',
+    backgroundColor: colors.surfaceMuted,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
     paddingHorizontal: 14,
     paddingVertical: 11,
   },
-  roleOptionSelected: { borderColor: '#176B5B', backgroundColor: '#F0F8F5' },
+  roleOptionSelected: { borderColor: colors.primary, backgroundColor: colors.primarySoft },
   roleOptionPressed: { opacity: 0.82 },
   radio: {
     width: 20,
     height: 20,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: '#AAB7B4',
+    borderColor: colors.placeholder,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  radioSelected: { borderColor: '#176B5B' },
-  radioDot: { width: 10, height: 10, borderRadius: 5, backgroundColor: '#176B5B' },
+  radioSelected: { borderColor: colors.primary },
+  radioDot: { width: 10, height: 10, borderRadius: 5, backgroundColor: colors.primary },
   roleCopy: { flex: 1, gap: 2 },
-  roleLabel: { color: '#253B37', fontSize: 14, fontWeight: '700' },
-  roleLabelSelected: { color: '#115448' },
-  roleDescription: { color: '#687975', fontSize: 12, lineHeight: 17 },
+  roleLabel: { color: colors.inkSoft, fontSize: 14, fontWeight: '700' },
+  roleLabelSelected: { color: colors.primaryPressed },
+  roleDescription: { color: colors.textMuted, fontSize: 12, lineHeight: 17 },
 });

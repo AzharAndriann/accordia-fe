@@ -1,13 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import type { ProjectStatus } from '@/types/api';
+import { colors } from '@/theme';
 
 const statusCopy: Record<ProjectStatus, { label: string; color: string; background: string }> = {
-  DRAFT: { label: 'Draft', color: '#755714', background: '#FFF5D9' },
-  ACTIVE: { label: 'Aktif', color: '#176B5B', background: '#DDF3EC' },
-  DELIVERED: { label: 'Diserahkan', color: '#315B8A', background: '#E6F0FB' },
-  COMPLETED: { label: 'Selesai', color: '#375E3B', background: '#E4F1E5' },
-  CANCELLED: { label: 'Dibatalkan', color: '#943B3B', background: '#FBE6E6' },
+  DRAFT: { label: 'Draft', color: colors.warning, background: colors.warningSurface },
+  ACTIVE: { label: 'Aktif', color: colors.primary, background: colors.primarySoft },
+  DELIVERED: { label: 'Diserahkan', color: colors.info, background: colors.infoSurface },
+  COMPLETED: { label: 'Selesai', color: colors.success, background: colors.successSurface },
+  CANCELLED: { label: 'Dibatalkan', color: colors.danger, background: colors.dangerSurface },
 };
 
 export function ProjectStatusBadge({ status }: { status: ProjectStatus }) {

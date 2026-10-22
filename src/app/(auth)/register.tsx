@@ -14,6 +14,7 @@ import {
   SubmitButton,
 } from '@/features/auth/auth-form-controls';
 import { register, registerSchema, saveAuthSession, type RegisterForm } from '@/features/auth';
+import { colors } from '@/theme';
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -167,7 +168,7 @@ export default function RegisterScreen() {
 
 const styles = StyleSheet.create({
   footerRow: { flexDirection: 'row', alignItems: 'center', gap: 5 },
-  footerText: { color: '#687975', fontSize: 14 },
-  footerLink: { color: '#176B5B', fontSize: 14, fontWeight: '800' },
-  terms: { color: '#7D8C89', fontSize: 11, lineHeight: 17, textAlign: 'center' },
+  footerText: { color: colors.textMuted, fontSize: 14 },
+  footerLink: { color: colors.primary, fontSize: 14, fontWeight: '800' },
+  terms: { color: colors.textSubtle, fontSize: 11, lineHeight: 17, textAlign: 'center' },
 });

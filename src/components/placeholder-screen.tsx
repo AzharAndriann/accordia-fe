@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import { Screen } from './screen';
+import { colors } from '@/theme';
 
 export function PlaceholderScreen({ title, description }: { title: string; description: string }) {
   return (
@@ -14,7 +15,7 @@ export function PlaceholderScreen({ title, description }: { title: string; descr
 }
 
 const styles = StyleSheet.create({
-  card: { borderRadius: 16, backgroundColor: '#FFFFFF', padding: 20, gap: 8 },
-  label: { color: '#176B5B', fontSize: 16, fontWeight: '700' },
-  text: { color: '#5D6D7E', fontSize: 14, lineHeight: 21 },
+  card: { borderRadius: 16, backgroundColor: colors.white, padding: 20, gap: 8 },
+  label: { color: colors.primary, fontSize: 16, fontWeight: '700' },
+  text: { color: colors.textMuted, fontSize: 14, lineHeight: 21 },
 });

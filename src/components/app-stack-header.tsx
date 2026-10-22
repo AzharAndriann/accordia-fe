@@ -1,6 +1,8 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { colors } from '@/theme';
+
 export function AppStackHeader({ title, onBack }: { title: string; onBack: () => void }) {
   return (
     <SafeAreaView edges={['top']} style={styles.safeArea}>
@@ -25,9 +27,9 @@ export function AppStackHeader({ title, onBack }: { title: string; onBack: () =>
 
 const styles = StyleSheet.create({
   safeArea: {
-    backgroundColor: '#F4F7F6',
+    backgroundColor: colors.background,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#DCE5E2',
+    borderBottomColor: colors.border,
   },
   header: {
     height: 54,
@@ -40,13 +42,13 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: '#E2EFEB',
+    backgroundColor: colors.primarySoft,
     alignItems: 'center',
     justifyContent: 'center',
   },
   pressed: { opacity: 0.65, transform: [{ scale: 0.96 }] },
   backIcon: {
-    color: '#176B5B',
+    color: colors.primary,
     fontSize: 34,
     lineHeight: 36,
     fontWeight: '400',
@@ -54,7 +56,7 @@ const styles = StyleSheet.create({
   },
   title: {
     flex: 1,
-    color: '#19332E',
+    color: colors.inkSoft,
     fontSize: 17,
     fontWeight: '800',
     textAlign: 'center',

@@ -11,6 +11,7 @@ import {
   ProjectStatusBadge,
 } from '@/features/projects';
 import type { CursorPage, ProjectSummary } from '@/types/api';
+import { colors } from '@/theme';
 
 export default function ProjectDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -106,7 +107,7 @@ export default function ProjectDetailScreen() {
 function ProjectState({ message, onRetry }: { message: string; onRetry?: () => void }) {
   return (
     <SafeAreaView style={styles.stateSafeArea}>
-      <ActivityIndicator color="#176B5B" size="large" />
+      <ActivityIndicator color={colors.primary} size="large" />
       <Text style={styles.stateMessage}>{message}</Text>
       {onRetry ? (
         <Pressable onPress={onRetry} style={styles.retryButton}>
@@ -118,29 +119,29 @@ function ProjectState({ message, onRetry }: { message: string; onRetry?: () => v
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#F4F7F6' },
+  safeArea: { flex: 1, backgroundColor: colors.background },
   content: { padding: 20, paddingBottom: 40, gap: 16 },
-  hero: { borderRadius: 24, backgroundColor: '#176B5B', padding: 22, gap: 12, overflow: 'hidden' },
+  hero: { borderRadius: 24, backgroundColor: colors.primary, padding: 22, gap: 12, overflow: 'hidden' },
   heroTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  role: { color: '#CFE5DF', fontSize: 12, fontWeight: '700' },
-  title: { color: '#FFFFFF', fontSize: 27, lineHeight: 34, fontWeight: '800', letterSpacing: -0.6 },
-  date: { color: '#CFE5DF', fontSize: 12 },
-  section: { borderWidth: 1, borderColor: '#E0E8E6', borderRadius: 20, backgroundColor: '#FFFFFF', padding: 18, gap: 10 },
-  sectionLabel: { color: '#408274', fontSize: 11, fontWeight: '800', letterSpacing: 1.35 },
-  description: { color: '#344A45', fontSize: 15, lineHeight: 23 },
+  role: { color: colors.primaryMuted, fontSize: 12, fontWeight: '700' },
+  title: { color: colors.white, fontSize: 27, lineHeight: 34, fontWeight: '800', letterSpacing: -0.6 },
+  date: { color: colors.primaryMuted, fontSize: 12 },
+  section: { borderWidth: 1, borderColor: colors.border, borderRadius: 20, backgroundColor: colors.white, padding: 18, gap: 10 },
+  sectionLabel: { color: colors.primaryAccent, fontSize: 11, fontWeight: '800', letterSpacing: 1.35 },
+  description: { color: colors.text, fontSize: 15, lineHeight: 23 },
   metaRow: { flexDirection: 'row', gap: 12 },
-  metaCard: { flex: 1, minHeight: 92, borderWidth: 1, borderColor: '#E0E8E6', borderRadius: 18, backgroundColor: '#FFFFFF', padding: 15, gap: 8 },
-  metaLabel: { color: '#7A8985', fontSize: 11, lineHeight: 15 },
-  metaValue: { color: '#19332E', fontSize: 13, lineHeight: 18, fontWeight: '800' },
+  metaCard: { flex: 1, minHeight: 92, borderWidth: 1, borderColor: colors.border, borderRadius: 18, backgroundColor: colors.white, padding: 15, gap: 8 },
+  metaLabel: { color: colors.textSubtle, fontSize: 11, lineHeight: 15 },
+  metaValue: { color: colors.inkSoft, fontSize: 13, lineHeight: 18, fontWeight: '800' },
   actionSection: { gap: 10, marginTop: 4 },
-  actionCard: { borderWidth: 1, borderColor: '#E0E8E6', borderRadius: 17, backgroundColor: '#FFFFFF', paddingHorizontal: 17, paddingVertical: 14, flexDirection: 'row', alignItems: 'center', gap: 12 },
+  actionCard: { borderWidth: 1, borderColor: colors.border, borderRadius: 17, backgroundColor: colors.white, paddingHorizontal: 17, paddingVertical: 14, flexDirection: 'row', alignItems: 'center', gap: 12 },
   pressed: { opacity: 0.76 },
   actionCopy: { flex: 1, gap: 3 },
-  actionTitle: { color: '#19332E', fontSize: 15, fontWeight: '800' },
-  actionDescription: { color: '#74837F', fontSize: 12, lineHeight: 17 },
-  arrow: { color: '#176B5B', fontSize: 25 },
-  stateSafeArea: { flex: 1, backgroundColor: '#F4F7F6', alignItems: 'center', justifyContent: 'center', padding: 28, gap: 12 },
-  stateMessage: { color: '#687975', fontSize: 14, lineHeight: 21, textAlign: 'center' },
-  retryButton: { borderWidth: 1, borderColor: '#176B5B', borderRadius: 12, paddingHorizontal: 18, paddingVertical: 10 },
-  retryText: { color: '#176B5B', fontWeight: '800' },
+  actionTitle: { color: colors.inkSoft, fontSize: 15, fontWeight: '800' },
+  actionDescription: { color: colors.textMuted, fontSize: 12, lineHeight: 17 },
+  arrow: { color: colors.primary, fontSize: 25 },
+  stateSafeArea: { flex: 1, backgroundColor: colors.background, alignItems: 'center', justifyContent: 'center', padding: 28, gap: 12 },
+  stateMessage: { color: colors.textMuted, fontSize: 14, lineHeight: 21, textAlign: 'center' },
+  retryButton: { borderWidth: 1, borderColor: colors.primary, borderRadius: 12, paddingHorizontal: 18, paddingVertical: 10 },
+  retryText: { color: colors.primary, fontWeight: '800' },
 });

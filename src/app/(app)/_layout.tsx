@@ -4,6 +4,7 @@ import { ActivityIndicator, View } from 'react-native';
 import { AppStackHeader } from '@/components/app-stack-header';
 import { BottomNavigation } from '@/components/bottom-navigation';
 import { useAuthSession } from '@/features/auth';
+import { colors } from '@/theme';
 
 export default function AppLayout() {
   const router = useRouter();
@@ -12,7 +13,7 @@ export default function AppLayout() {
     <AppStackHeader onBack={() => router.back()} title={title} />
   );
 
-  if (!isReady) return <ActivityIndicator color="#176B5B" style={{ flex: 1 }} />;
+  if (!isReady) return <ActivityIndicator color={colors.primary} style={{ flex: 1 }} />;
   if (!user) return <Redirect href="/(auth)/login" />;
 
   return (

@@ -3,6 +3,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { getCurrentUser } from '@/lib/session';
+import { colors } from '@/theme';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -65,27 +66,27 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#F4F7F6' },
+  safeArea: { flex: 1, backgroundColor: colors.background },
   content: { padding: 20, paddingTop: 24, paddingBottom: 120, gap: 24 },
   heading: { gap: 6 },
-  eyebrow: { color: '#408274', fontSize: 11, fontWeight: '800', letterSpacing: 1.7 },
-  title: { color: '#142B27', fontSize: 32, lineHeight: 39, fontWeight: '800', letterSpacing: -0.8 },
-  description: { color: '#687975', fontSize: 14, lineHeight: 21 },
-  heroCard: { minHeight: 225, borderRadius: 26, backgroundColor: '#176B5B', padding: 22, justifyContent: 'flex-end', gap: 10, overflow: 'hidden' },
-  heroDecoration: { position: 'absolute', width: 210, height: 210, borderRadius: 105, backgroundColor: '#2A8976', top: -100, right: -70 },
-  heroLabel: { color: '#A9D7CD', fontSize: 10, fontWeight: '800', letterSpacing: 1.4 },
-  heroTitle: { color: '#FFFFFF', maxWidth: 280, fontSize: 24, lineHeight: 31, fontWeight: '800', letterSpacing: -0.5 },
-  heroButton: { alignSelf: 'flex-start', minHeight: 42, borderRadius: 21, backgroundColor: '#FFFFFF', paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 4 },
-  heroButtonText: { color: '#176B5B', fontSize: 13, fontWeight: '800' },
-  heroArrow: { color: '#176B5B', fontSize: 21 },
+  eyebrow: { color: colors.primaryAccent, fontSize: 11, fontWeight: '800', letterSpacing: 1.7 },
+  title: { color: colors.ink, fontSize: 32, lineHeight: 39, fontWeight: '800', letterSpacing: -0.8 },
+  description: { color: colors.textMuted, fontSize: 14, lineHeight: 21 },
+  heroCard: { minHeight: 225, borderRadius: 26, backgroundColor: colors.primary, padding: 22, justifyContent: 'flex-end', gap: 10, overflow: 'hidden' },
+  heroDecoration: { position: 'absolute', width: 210, height: 210, borderRadius: 105, backgroundColor: colors.primaryBright, top: -100, right: -70 },
+  heroLabel: { color: colors.primaryMuted, fontSize: 10, fontWeight: '800', letterSpacing: 1.4 },
+  heroTitle: { color: colors.white, maxWidth: 280, fontSize: 24, lineHeight: 31, fontWeight: '800', letterSpacing: -0.5 },
+  heroButton: { alignSelf: 'flex-start', minHeight: 42, borderRadius: 21, backgroundColor: colors.white, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 4 },
+  heroButtonText: { color: colors.primary, fontSize: 13, fontWeight: '800' },
+  heroArrow: { color: colors.primary, fontSize: 21 },
   pressed: { opacity: 0.76, transform: [{ scale: 0.99 }] },
   section: { gap: 11 },
-  sectionTitle: { color: '#19332E', fontSize: 18, fontWeight: '800' },
-  quickCard: { borderWidth: 1, borderColor: '#E0E8E6', borderRadius: 18, backgroundColor: '#FFFFFF', padding: 15, flexDirection: 'row', alignItems: 'center', gap: 13 },
-  quickIcon: { width: 44, height: 44, borderRadius: 14, backgroundColor: '#E2F2ED', alignItems: 'center', justifyContent: 'center' },
-  quickIconText: { color: '#176B5B', fontSize: 21, fontWeight: '800' },
+  sectionTitle: { color: colors.inkSoft, fontSize: 18, fontWeight: '800' },
+  quickCard: { borderWidth: 1, borderColor: colors.border, borderRadius: 18, backgroundColor: colors.white, padding: 15, flexDirection: 'row', alignItems: 'center', gap: 13 },
+  quickIcon: { width: 44, height: 44, borderRadius: 14, backgroundColor: colors.primarySoft, alignItems: 'center', justifyContent: 'center' },
+  quickIconText: { color: colors.primary, fontSize: 21, fontWeight: '800' },
   quickCopy: { flex: 1, gap: 3 },
-  quickTitle: { color: '#19332E', fontSize: 14, fontWeight: '800' },
-  quickDescription: { color: '#74837F', fontSize: 12, lineHeight: 17 },
-  quickArrow: { color: '#176B5B', fontSize: 24 },
+  quickTitle: { color: colors.inkSoft, fontSize: 14, fontWeight: '800' },
+  quickDescription: { color: colors.textMuted, fontSize: 12, lineHeight: 17 },
+  quickArrow: { color: colors.primary, fontSize: 24 },
 });

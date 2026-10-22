@@ -11,6 +11,7 @@ import {
   ProjectStatusBadge,
 } from '@/features/projects';
 import { getCurrentUser } from '@/lib/session';
+import { colors } from '@/theme';
 import type { ProjectSummary } from '@/types/api';
 
 export default function ProjectsScreen() {
@@ -60,7 +61,7 @@ export default function ProjectsScreen() {
         ListEmptyComponent={
           projectsQuery.isPending ? (
             <View style={styles.stateCard}>
-              <ActivityIndicator color="#176B5B" size="large" />
+              <ActivityIndicator color={colors.primary} size="large" />
               <Text style={styles.stateText}>Memuat proyek...</Text>
             </View>
           ) : projectsQuery.isError ? (
@@ -95,7 +96,7 @@ export default function ProjectsScreen() {
         }
         ListFooterComponent={
           projectsQuery.isFetchingNextPage ? (
-            <ActivityIndicator color="#176B5B" style={styles.footerLoader} />
+            <ActivityIndicator color={colors.primary} style={styles.footerLoader} />
           ) : undefined
         }
         renderItem={({ item }) => (
@@ -129,37 +130,37 @@ function ProjectCard({ project, onPress }: { project: ProjectSummary; onPress: (
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#F4F7F6' },
+  safeArea: { flex: 1, backgroundColor: colors.background },
   content: { paddingHorizontal: 20, paddingBottom: 118, gap: 14 },
   emptyContent: { flexGrow: 1 },
   header: { paddingTop: 22, paddingBottom: 10, gap: 20 },
   headerCopy: { gap: 6 },
-  eyebrow: { color: '#398070', fontSize: 11, fontWeight: '800', letterSpacing: 1.6 },
-  title: { color: '#142B27', fontSize: 32, lineHeight: 39, fontWeight: '800', letterSpacing: -0.9 },
-  description: { color: '#687975', fontSize: 14, lineHeight: 21, maxWidth: 360 },
-  createButton: { minHeight: 50, borderRadius: 15, backgroundColor: '#176B5B', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 },
+  eyebrow: { color: colors.primaryAccent, fontSize: 11, fontWeight: '800', letterSpacing: 1.6 },
+  title: { color: colors.ink, fontSize: 32, lineHeight: 39, fontWeight: '800', letterSpacing: -0.9 },
+  description: { color: colors.textMuted, fontSize: 14, lineHeight: 21, maxWidth: 360 },
+  createButton: { minHeight: 50, borderRadius: 15, backgroundColor: colors.primary, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 },
   pressed: { opacity: 0.82 },
-  createIcon: { color: '#FFFFFF', fontSize: 22, lineHeight: 24 },
-  createText: { color: '#FFFFFF', fontSize: 15, fontWeight: '800' },
-  card: { borderWidth: 1, borderColor: '#E0E8E6', borderRadius: 20, backgroundColor: '#FFFFFF', padding: 18, gap: 10, shadowColor: '#0A332B', shadowOffset: { width: 0, height: 5 }, shadowOpacity: 0.05, shadowRadius: 14 },
+  createIcon: { color: colors.white, fontSize: 22, lineHeight: 24 },
+  createText: { color: colors.white, fontSize: 15, fontWeight: '800' },
+  card: { borderWidth: 1, borderColor: colors.border, borderRadius: 20, backgroundColor: colors.white, padding: 18, gap: 10, shadowColor: colors.inkDeep, shadowOffset: { width: 0, height: 5 }, shadowOpacity: 0.05, shadowRadius: 14 },
   cardPressed: { opacity: 0.78, transform: [{ scale: 0.99 }] },
   cardTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  cardDate: { color: '#879590', fontSize: 11 },
-  cardTitle: { color: '#19332E', fontSize: 18, lineHeight: 24, fontWeight: '800' },
-  cardDescription: { color: '#687975', fontSize: 13, lineHeight: 20 },
-  cardBottom: { borderTopWidth: 1, borderTopColor: '#EDF1F0', paddingTop: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  roleText: { color: '#477067', fontSize: 12, fontWeight: '700' },
-  arrow: { color: '#176B5B', fontSize: 25, lineHeight: 25 },
-  stateCard: { flex: 1, minHeight: 340, borderWidth: 1, borderColor: '#E0E8E6', borderRadius: 24, backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center', padding: 28, gap: 10 },
-  stateIcon: { width: 68, height: 68, borderRadius: 22, backgroundColor: '#E2F2ED', alignItems: 'center', justifyContent: 'center', marginBottom: 4 },
-  errorIcon: { backgroundColor: '#FBEAEA' },
-  folderIcon: { color: '#176B5B', fontSize: 39, fontWeight: '700', transform: [{ rotate: '-15deg' }] },
-  errorMark: { color: '#A64141', fontSize: 28, fontWeight: '800' },
-  stateTitle: { color: '#19332E', fontSize: 20, fontWeight: '800', textAlign: 'center' },
-  stateText: { color: '#71817D', fontSize: 14, lineHeight: 21, textAlign: 'center' },
-  emptyButton: { backgroundColor: '#176B5B', borderRadius: 13, paddingHorizontal: 18, paddingVertical: 12, marginTop: 8 },
-  emptyButtonText: { color: '#FFFFFF', fontSize: 14, fontWeight: '800' },
-  retryButton: { borderWidth: 1, borderColor: '#176B5B', borderRadius: 12, paddingHorizontal: 18, paddingVertical: 10, marginTop: 8 },
-  retryText: { color: '#176B5B', fontSize: 14, fontWeight: '800' },
+  cardDate: { color: colors.textSubtle, fontSize: 11 },
+  cardTitle: { color: colors.inkSoft, fontSize: 18, lineHeight: 24, fontWeight: '800' },
+  cardDescription: { color: colors.textMuted, fontSize: 13, lineHeight: 20 },
+  cardBottom: { borderTopWidth: 1, borderTopColor: colors.divider, paddingTop: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  roleText: { color: colors.primaryAccent, fontSize: 12, fontWeight: '700' },
+  arrow: { color: colors.primary, fontSize: 25, lineHeight: 25 },
+  stateCard: { flex: 1, minHeight: 340, borderWidth: 1, borderColor: colors.border, borderRadius: 24, backgroundColor: colors.white, alignItems: 'center', justifyContent: 'center', padding: 28, gap: 10 },
+  stateIcon: { width: 68, height: 68, borderRadius: 22, backgroundColor: colors.primarySoft, alignItems: 'center', justifyContent: 'center', marginBottom: 4 },
+  errorIcon: { backgroundColor: colors.dangerSurface },
+  folderIcon: { color: colors.primary, fontSize: 39, fontWeight: '700', transform: [{ rotate: '-15deg' }] },
+  errorMark: { color: colors.danger, fontSize: 28, fontWeight: '800' },
+  stateTitle: { color: colors.inkSoft, fontSize: 20, fontWeight: '800', textAlign: 'center' },
+  stateText: { color: colors.textMuted, fontSize: 14, lineHeight: 21, textAlign: 'center' },
+  emptyButton: { backgroundColor: colors.primary, borderRadius: 13, paddingHorizontal: 18, paddingVertical: 12, marginTop: 8 },
+  emptyButtonText: { color: colors.white, fontSize: 14, fontWeight: '800' },
+  retryButton: { borderWidth: 1, borderColor: colors.primary, borderRadius: 12, paddingHorizontal: 18, paddingVertical: 10, marginTop: 8 },
+  retryText: { color: colors.primary, fontSize: 14, fontWeight: '800' },
   footerLoader: { paddingVertical: 20 },
 });

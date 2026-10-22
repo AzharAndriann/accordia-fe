@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { colors } from '@/theme';
+
 type AuthScreenProps = PropsWithChildren<{
   title: string;
   description: string;
@@ -109,12 +111,12 @@ export function AuthScreen({
 }
 
 const styles = StyleSheet.create({
-  heroSafeArea: { flex: 1, backgroundColor: '#176B5B' },
-  heroContent: { flexGrow: 1, backgroundColor: '#FFFFFF' },
+  heroSafeArea: { flex: 1, backgroundColor: colors.primary },
+  heroContent: { flexGrow: 1, backgroundColor: colors.white },
   heroHeader: {
     height: 265,
     overflow: 'hidden',
-    backgroundColor: '#176B5B',
+    backgroundColor: colors.primary,
     alignItems: 'center',
   },
   heroBackground: {
@@ -133,7 +135,7 @@ const styles = StyleSheet.create({
   },
   heroLogo: { width: 72, height: 72 },
   heroBrandName: {
-    color: '#FFFFFF',
+    color: colors.white,
     fontSize: 21,
     fontWeight: '800',
     letterSpacing: -0.5,
@@ -144,14 +146,14 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: '100%',
     maxWidth: 520,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.white,
     paddingHorizontal: 26,
     paddingTop: 6,
     paddingBottom: 32,
   },
   heroHeading: { alignItems: 'center', marginBottom: 24 },
   heroTitle: {
-    color: '#142B27',
+    color: colors.ink,
     fontSize: 25,
     lineHeight: 32,
     fontWeight: '800',
@@ -159,7 +161,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   heroDescription: {
-    color: '#6C7D79',
+    color: colors.textMuted,
     fontSize: 14,
     lineHeight: 21,
     marginTop: 7,
@@ -168,7 +170,7 @@ const styles = StyleSheet.create({
   },
   heroForm: { gap: 18 },
   heroFooter: { alignItems: 'center', marginTop: 24 },
-  safeArea: { flex: 1, backgroundColor: '#F5F8F7' },
+  safeArea: { flex: 1, backgroundColor: colors.backgroundSplash },
   keyboardView: { flex: 1 },
   content: {
     flexGrow: 1,
@@ -184,7 +186,7 @@ const styles = StyleSheet.create({
     width: 240,
     height: 240,
     borderRadius: 120,
-    backgroundColor: '#DDEDE8',
+    backgroundColor: colors.primarySoft,
     right: -100,
     top: -100,
   },
@@ -194,7 +196,7 @@ const styles = StyleSheet.create({
     height: 180,
     borderRadius: 90,
     borderWidth: 34,
-    borderColor: '#E6EFEC',
+    borderColor: colors.border,
     left: -105,
     bottom: 36,
   },
@@ -203,7 +205,7 @@ const styles = StyleSheet.create({
     width: 34,
     height: 34,
     borderRadius: 11,
-    backgroundColor: '#176B5B',
+    backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -212,34 +214,34 @@ const styles = StyleSheet.create({
     height: 17,
     borderRadius: 9,
     borderWidth: 3,
-    borderColor: '#FFFFFF',
+    borderColor: colors.white,
   },
   logoDot: {
     position: 'absolute',
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#F4C95D',
+    backgroundColor: colors.gold,
     right: 6,
     top: 6,
   },
-  brandName: { color: '#123D35', fontSize: 21, fontWeight: '800', letterSpacing: -0.5 },
+  brandName: { color: colors.inkDeep, fontSize: 21, fontWeight: '800', letterSpacing: -0.5 },
   heading: { marginBottom: 24 },
   eyebrow: {
-    color: '#408274',
+    color: colors.primaryAccent,
     fontSize: 11,
     fontWeight: '800',
     letterSpacing: 1.5,
     marginBottom: 10,
   },
-  title: { color: '#142B27', fontSize: 34, lineHeight: 41, fontWeight: '800', letterSpacing: -1 },
-  description: { color: '#62736F', fontSize: 15, lineHeight: 23, marginTop: 8, maxWidth: 400 },
+  title: { color: colors.ink, fontSize: 34, lineHeight: 41, fontWeight: '800', letterSpacing: -1 },
+  description: { color: colors.textMuted, fontSize: 15, lineHeight: 23, marginTop: 8, maxWidth: 400 },
   card: {
     borderRadius: 24,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.white,
     padding: 20,
     gap: 18,
-    shadowColor: '#173D35',
+    shadowColor: colors.inkDeep,
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.08,
     shadowRadius: 22,

@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { projectRoleLabel } from '@/features/projects';
 import { clearSession, getCurrentUser } from '@/lib/session';
+import { colors } from '@/theme';
 
 export default function AccountScreen() {
   const router = useRouter();
@@ -63,24 +64,24 @@ export default function AccountScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#F4F7F6' },
+  safeArea: { flex: 1, backgroundColor: colors.background },
   content: { padding: 20, paddingTop: 24, paddingBottom: 120, gap: 18 },
   heading: { gap: 6, marginBottom: 5 },
-  eyebrow: { color: '#408274', fontSize: 11, fontWeight: '800', letterSpacing: 1.7 },
-  title: { color: '#142B27', fontSize: 32, lineHeight: 39, fontWeight: '800', letterSpacing: -0.8 },
-  description: { color: '#687975', fontSize: 14, lineHeight: 21 },
-  profileCard: { borderRadius: 22, backgroundColor: '#176B5B', padding: 20, flexDirection: 'row', alignItems: 'center', gap: 15 },
-  avatar: { width: 58, height: 58, borderRadius: 19, backgroundColor: '#E2F2ED', alignItems: 'center', justifyContent: 'center' },
-  avatarText: { color: '#176B5B', fontSize: 24, fontWeight: '800' },
+  eyebrow: { color: colors.primaryAccent, fontSize: 11, fontWeight: '800', letterSpacing: 1.7 },
+  title: { color: colors.ink, fontSize: 32, lineHeight: 39, fontWeight: '800', letterSpacing: -0.8 },
+  description: { color: colors.textMuted, fontSize: 14, lineHeight: 21 },
+  profileCard: { borderRadius: 22, backgroundColor: colors.primary, padding: 20, flexDirection: 'row', alignItems: 'center', gap: 15 },
+  avatar: { width: 58, height: 58, borderRadius: 19, backgroundColor: colors.primarySoft, alignItems: 'center', justifyContent: 'center' },
+  avatarText: { color: colors.primary, fontSize: 24, fontWeight: '800' },
   profileCopy: { flex: 1, gap: 4 },
-  name: { color: '#FFFFFF', fontSize: 19, fontWeight: '800' },
-  email: { color: '#CFE5DF', fontSize: 13 },
-  infoCard: { borderWidth: 1, borderColor: '#E0E8E6', borderRadius: 19, backgroundColor: '#FFFFFF', paddingHorizontal: 17 },
+  name: { color: colors.white, fontSize: 19, fontWeight: '800' },
+  email: { color: colors.primaryMuted, fontSize: 13 },
+  infoCard: { borderWidth: 1, borderColor: colors.border, borderRadius: 19, backgroundColor: colors.white, paddingHorizontal: 17 },
   infoRow: { minHeight: 58, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 16 },
-  divider: { height: 1, backgroundColor: '#EDF1F0' },
-  infoLabel: { color: '#71817D', fontSize: 13 },
-  infoValue: { color: '#19332E', fontSize: 13, fontWeight: '800' },
-  logoutButton: { minHeight: 52, borderWidth: 1, borderColor: '#DFAAAA', borderRadius: 15, alignItems: 'center', justifyContent: 'center', marginTop: 4 },
-  logoutText: { color: '#A23F3F', fontSize: 14, fontWeight: '800' },
+  divider: { height: 1, backgroundColor: colors.divider },
+  infoLabel: { color: colors.textMuted, fontSize: 13 },
+  infoValue: { color: colors.inkSoft, fontSize: 13, fontWeight: '800' },
+  logoutButton: { minHeight: 52, borderWidth: 1, borderColor: colors.dangerBorder, borderRadius: 15, alignItems: 'center', justifyContent: 'center', marginTop: 4 },
+  logoutText: { color: colors.danger, fontSize: 14, fontWeight: '800' },
   pressed: { opacity: 0.72 },
 });

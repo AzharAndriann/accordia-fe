@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { getCurrentUser } from '@/lib/session';
+import { colors } from '@/theme';
 
 type IconName = 'home' | 'projects' | 'user';
 
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
     right: 18,
     left: 18,
     borderRadius: 34,
-    shadowColor: '#06110F',
+    shadowColor: colors.inkShadow,
     shadowOffset: { width: 0, height: 9 },
     shadowOpacity: 0.24,
     shadowRadius: 18,
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({
     minHeight: 66,
     alignSelf: 'stretch',
     borderRadius: 34,
-    backgroundColor: '#14201E',
+    backgroundColor: colors.inkNav,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 9,
@@ -150,7 +151,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 4,
   },
-  activeDot: { width: 5, height: 5, borderRadius: 3, backgroundColor: '#50B69F' },
+  activeDot: { width: 5, height: 5, borderRadius: 3, backgroundColor: colors.primaryHighlight },
   pressed: { opacity: 0.72, transform: [{ scale: 0.97 }] },
   createSlot: {
     flexBasis: 0,
@@ -159,10 +160,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  createButton: { width: 50, height: 50, borderRadius: 25, backgroundColor: '#F8FAF9', alignItems: 'center', justifyContent: 'center' },
-  createIcon: { color: '#176B5B', fontSize: 27, lineHeight: 29, fontWeight: '500' },
-  iconActive: { borderColor: '#FFFFFF' },
-  iconInactive: { borderColor: '#9CA8A5' },
+  createButton: { width: 50, height: 50, borderRadius: 25, backgroundColor: colors.surfaceMuted, alignItems: 'center', justifyContent: 'center' },
+  createIcon: { color: colors.primary, fontSize: 27, lineHeight: 29, fontWeight: '500' },
+  iconActive: { borderColor: colors.white },
+  iconInactive: { borderColor: colors.navInactive },
   homeIcon: { width: 22, height: 22, alignItems: 'center', justifyContent: 'flex-end' },
   homeRoof: { position: 'absolute', top: 1, width: 14, height: 14, borderTopWidth: 2, borderLeftWidth: 2, transform: [{ rotate: '45deg' }] },
   homeBody: { width: 15, height: 13, borderWidth: 2, borderTopWidth: 0, borderBottomLeftRadius: 4, borderBottomRightRadius: 4 },

@@ -9,6 +9,7 @@ import { ApiError } from '@/lib/api';
 import { AuthScreen } from '@/features/auth/auth-screen';
 import { FormError, FormField, SubmitButton } from '@/features/auth/auth-form-controls';
 import { login, loginSchema, saveAuthSession, type LoginForm } from '@/features/auth';
+import { colors } from '@/theme';
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -110,7 +111,7 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
   footerRow: { flexDirection: 'row', alignItems: 'center', gap: 5 },
-  footerText: { color: '#687975', fontSize: 14 },
-  footerLink: { color: '#176B5B', fontSize: 14, fontWeight: '800' },
-  securityNote: { color: '#7D8C89', fontSize: 12, textAlign: 'center', lineHeight: 18 },
+  footerText: { color: colors.textMuted, fontSize: 14 },
+  footerLink: { color: colors.primary, fontSize: 14, fontWeight: '800' },
+  securityNote: { color: colors.textSubtle, fontSize: 12, textAlign: 'center', lineHeight: 18 },
 });

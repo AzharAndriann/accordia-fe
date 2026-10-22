@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 
+import { colors } from '@/theme';
+
 type AnimatedSplashProps = {
   onFinish: () => void;
 };
@@ -165,28 +167,28 @@ const styles = StyleSheet.create({
     zIndex: 100,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F5F8F7',
+    backgroundColor: colors.backgroundSplash,
   },
   halo: {
     position: 'absolute',
     width: 330,
     height: 330,
     borderRadius: 165,
-    backgroundColor: '#E2F0EC',
+    backgroundColor: colors.primarySoft,
   },
   content: { alignItems: 'center', gap: 14 },
   mark: { width: 174, height: 174 },
   wordmark: {
-    color: '#123D35',
+    color: colors.inkDeep,
     fontSize: 37,
     fontWeight: '800',
     letterSpacing: -1.2,
   },
-  tagline: { color: '#6A7C77', fontSize: 13, letterSpacing: 0.2, marginTop: 5 },
+  tagline: { color: colors.textMuted, fontSize: 13, letterSpacing: 0.2, marginTop: 5 },
   footer: {
     position: 'absolute',
     bottom: 46,
-    color: '#77908A',
+    color: colors.textSubtle,
     fontSize: 9,
     fontWeight: '700',
     letterSpacing: 1.6,

@@ -14,6 +14,7 @@ import {
 } from '@/features/projects';
 import { ApiError } from '@/lib/api';
 import { getCurrentUser } from '@/lib/session';
+import { colors } from '@/theme';
 
 export default function CreateProjectScreen() {
   const router = useRouter();
@@ -119,19 +120,19 @@ export default function CreateProjectScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#F4F7F6' },
+  safeArea: { flex: 1, backgroundColor: colors.background },
   flex: { flex: 1 },
   content: { padding: 20, paddingBottom: 38, gap: 22 },
   heading: { paddingTop: 10, gap: 7 },
-  eyebrow: { color: '#408274', fontSize: 11, fontWeight: '800', letterSpacing: 1.5 },
-  title: { color: '#142B27', fontSize: 28, lineHeight: 35, fontWeight: '800', letterSpacing: -0.7 },
-  description: { color: '#687975', fontSize: 14, lineHeight: 21 },
-  formCard: { borderWidth: 1, borderColor: '#E0E8E6', borderRadius: 22, backgroundColor: '#FFFFFF', padding: 18, gap: 18 },
+  eyebrow: { color: colors.primaryAccent, fontSize: 11, fontWeight: '800', letterSpacing: 1.5 },
+  title: { color: colors.ink, fontSize: 28, lineHeight: 35, fontWeight: '800', letterSpacing: -0.7 },
+  description: { color: colors.textMuted, fontSize: 14, lineHeight: 21 },
+  formCard: { borderWidth: 1, borderColor: colors.border, borderRadius: 22, backgroundColor: colors.white, padding: 18, gap: 18 },
   textArea: { minHeight: 130, paddingTop: 15 },
-  helper: { color: '#7A8985', fontSize: 12, lineHeight: 18 },
-  blocked: { flex: 1, backgroundColor: '#F4F7F6', alignItems: 'center', justifyContent: 'center', padding: 30, gap: 10 },
-  blockedIcon: { width: 62, height: 62, borderRadius: 20, backgroundColor: '#E2F2ED', alignItems: 'center', justifyContent: 'center' },
-  blockedMark: { color: '#176B5B', fontSize: 26, fontWeight: '800' },
-  blockedTitle: { color: '#19332E', fontSize: 21, fontWeight: '800' },
-  blockedText: { color: '#71817D', fontSize: 14, lineHeight: 21, textAlign: 'center' },
+  helper: { color: colors.textSubtle, fontSize: 12, lineHeight: 18 },
+  blocked: { flex: 1, backgroundColor: colors.background, alignItems: 'center', justifyContent: 'center', padding: 30, gap: 10 },
+  blockedIcon: { width: 62, height: 62, borderRadius: 20, backgroundColor: colors.primarySoft, alignItems: 'center', justifyContent: 'center' },
+  blockedMark: { color: colors.primary, fontSize: 26, fontWeight: '800' },
+  blockedTitle: { color: colors.inkSoft, fontSize: 21, fontWeight: '800' },
+  blockedText: { color: colors.textMuted, fontSize: 14, lineHeight: 21, textAlign: 'center' },
 });
