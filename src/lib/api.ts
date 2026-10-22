@@ -12,7 +12,7 @@ export class ApiError extends Error {
   }
 }
 
-function getApiBaseUrl() {
+export function getApiBaseUrl() {
   const configuredUrl = process.env.EXPO_PUBLIC_API_URL?.trim();
   if (!configuredUrl) {
     throw new ApiError(0, 'API_URL_MISSING', 'EXPO_PUBLIC_API_URL belum diisi');
@@ -25,11 +25,12 @@ export async function apiRequest<T>(
   options: RequestInit & { accessToken?: string } = {},
 ): Promise<T> {
   const { accessToken, headers, ...requestOptions } = options;
+  const isFormData = typeof FormData !== 'undefined' && requestOptions.body instanceof FormData;
   const response = await fetch(`${getApiBaseUrl()}${path}`, {
     ...requestOptions,
     headers: {
       Accept: 'application/json',
-      ...(requestOptions.body ? { 'Content-Type': 'application/json' } : {}),
+      ...(requestOptions.body && !isFormData ? { 'Content-Type': 'application/json' } : {}),
       ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
       ...headers,
     },
