@@ -30,6 +30,10 @@ export default function AppLayout() {
           options={{ header: () => renderHeader('Detail proyek'), title: 'Detail proyek' }}
         />
         <Stack.Screen
+          name="projects/[id]/invite"
+          options={{ header: () => renderHeader('Undang klien'), title: 'Undang klien' }}
+        />
+        <Stack.Screen
           name="projects/[id]/agreement"
           options={{ header: () => renderHeader('Kesepakatan'), title: 'Kesepakatan' }}
         />

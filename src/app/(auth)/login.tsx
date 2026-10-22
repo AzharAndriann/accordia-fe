@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { Link, useRouter } from 'expo-router';
+import { type Href, Link, useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -12,6 +12,7 @@ import { login, loginSchema, saveAuthSession, type LoginForm } from '@/features/
 
 export default function LoginScreen() {
   const router = useRouter();
+  const { redirect } = useLocalSearchParams<{ redirect?: string }>();
   const [showPassword, setShowPassword] = useState(false);
   const {
     control,
@@ -26,7 +27,7 @@ export default function LoginScreen() {
     mutationFn: login,
     async onSuccess(response) {
       await saveAuthSession(response.data);
-      router.replace('/(app)/projects');
+      router.replace((redirect?.startsWith('/') ? redirect : '/(app)/projects') as Href);
     },
   });
 

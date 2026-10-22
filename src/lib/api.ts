@@ -1,4 +1,5 @@
 import type { ApiErrorBody, ApiSuccess } from '@/types/api';
+import { getAccessToken } from '@/lib/session';
 
 export class ApiError extends Error {
   constructor(
@@ -39,6 +40,14 @@ export async function apiRequest<T>(
     throw new ApiError(response.status, apiError?.code ?? 'API_ERROR', apiError?.message ?? 'Request gagal');
   }
   return payload as T;
+}
+
+export function authenticatedRequest<T>(path: string, options?: RequestInit) {
+  const accessToken = getAccessToken();
+  if (!accessToken) {
+    throw new ApiError(401, 'UNAUTHENTICATED', 'Silakan masuk kembali untuk melanjutkan');
+  }
+  return apiRequest<T>(path, { ...options, accessToken });
 }
 
 export function checkHealth() {

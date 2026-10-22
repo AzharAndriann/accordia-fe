@@ -43,11 +43,14 @@ export default function ProjectDetailScreen() {
 
   const project = projectQuery.data;
   const actions = [
+    ...(project.role === 'FREELANCER'
+      ? [{ label: 'Undang klien', description: 'Kirim tautan undangan proyek', route: 'invite' }]
+      : []),
     { label: 'Kesepakatan', description: 'Ruang lingkup, nilai, dan tenggat', route: 'agreement' },
     { label: 'Perubahan', description: 'Permintaan perubahan pekerjaan', route: 'changes' },
     { label: 'Penyerahan', description: 'Hasil kerja dan revisi', route: 'deliveries' },
     { label: 'Pembayaran', description: 'Riwayat dan bukti pembayaran', route: 'payments' },
-  ] as const;
+  ];
 
   return (
     <SafeAreaView edges={['bottom']} style={styles.safeArea}>
