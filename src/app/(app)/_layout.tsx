@@ -49,6 +49,10 @@ export default function AppLayout() {
           name="projects/[id]/payments"
           options={{ header: () => renderHeader('Pembayaran'), title: 'Pembayaran' }}
         />
+        <Stack.Screen
+          name="projects/[id]/activity"
+          options={{ header: () => renderHeader('Aktivitas'), title: 'Aktivitas' }}
+        />
       </Stack>
       <BottomNavigation />
     </View>
