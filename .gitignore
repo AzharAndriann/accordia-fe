@@ -41,4 +41,5 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+urutan.md
 Accordia-Frontend.md
