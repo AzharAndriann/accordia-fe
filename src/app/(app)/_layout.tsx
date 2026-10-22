@@ -1,14 +1,19 @@
-import { Stack, useRouter } from 'expo-router';
-import { View } from 'react-native';
+import { Redirect, Stack, useRouter } from 'expo-router';
+import { ActivityIndicator, View } from 'react-native';
 
 import { AppStackHeader } from '@/components/app-stack-header';
 import { BottomNavigation } from '@/components/bottom-navigation';
+import { useAuthSession } from '@/features/auth';
 
 export default function AppLayout() {
   const router = useRouter();
+  const { isReady, user } = useAuthSession();
   const renderHeader = (title: string) => (
     <AppStackHeader onBack={() => router.back()} title={title} />
   );
+
+  if (!isReady) return <ActivityIndicator color="#176B5B" style={{ flex: 1 }} />;
+  if (!user) return <Redirect href="/(auth)/login" />;
 
   return (
     <View style={{ flex: 1 }}>

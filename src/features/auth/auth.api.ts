@@ -1,5 +1,5 @@
 import { apiRequest } from '@/lib/api';
-import { setAccessToken, setCurrentUser, setRefreshToken } from '@/lib/session';
+import { persistSession } from '@/lib/session';
 import type { ApiSuccess } from '@/types/api';
 
 import type { AuthRole, LoginForm, RegisterForm } from './auth.schema';
@@ -50,7 +50,10 @@ export function register(input: RegisterForm) {
 }
 
 export async function saveAuthSession(result: AuthResult) {
-  setAccessToken(result.accessToken);
-  setCurrentUser(result.user);
-  await setRefreshToken(result.refreshToken);
+  await persistSession({
+    accessToken: result.accessToken,
+    refreshToken: result.refreshToken,
+    expiresAt: Date.now() + result.expiresIn * 1_000,
+    user: result.user,
+  });
 }
