@@ -45,7 +45,9 @@ export function uploadProjectFiles(projectId: string, assets: DocumentPickerAsse
   });
 }
 
-export async function downloadProjectFile(file: ProjectFile) {
+export async function downloadProjectFile(
+  file: Pick<ProjectFile, 'id' | 'originalName' | 'mimeType'>,
+) {
   const accessToken = getAccessToken();
   if (!accessToken) throw new ApiError(401, 'UNAUTHENTICATED', 'Silakan masuk kembali');
   if (Platform.OS === 'web') {
