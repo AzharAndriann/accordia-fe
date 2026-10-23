@@ -17,6 +17,7 @@ type AnimatedSplashProps = {
 };
 
 const splashMark = require('../../assets/images/accordia-splash-mark.png');
+const SPLASH_HOLD_DURATION = 1_500;
 
 export function AnimatedSplash({ onFinish }: AnimatedSplashProps) {
   const [values] = useState(() => ({
@@ -95,7 +96,7 @@ export function AnimatedSplash({ onFinish }: AnimatedSplashProps) {
             useNativeDriver: true,
           }),
         ]),
-        Animated.delay(reduceMotion ? 350 : 650),
+        Animated.delay(reduceMotion ? 700 : SPLASH_HOLD_DURATION),
         Animated.timing(overlayOpacity, {
           toValue: 0,
           duration: reduceMotion ? 120 : 380,
