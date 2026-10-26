@@ -1,4 +1,4 @@
-import { usePathname, useRouter } from 'expo-router';
+import { type Href, usePathname, useRouter } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -13,12 +13,20 @@ const destinations = [
   { label: 'Akun', route: '/(app)/account', path: '/account', icon: 'user' as const },
 ] as const;
 
-export function BottomNavigation() {
+export function BottomNavigation({
+  onNavigate,
+}: {
+  onNavigate?: (route: Href, path: string) => void;
+}) {
   const pathname = usePathname();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const currentUser = getCurrentUser();
   const visible = pathname === '/' || pathname === '/projects' || pathname === '/account';
+  const navigate = (route: Href, path: string) => {
+    if (onNavigate) onNavigate(route, path);
+    else router.replace(route);
+  };
 
   if (!visible) return null;
 
@@ -34,7 +42,7 @@ export function BottomNavigation() {
             icon={item.icon}
             key={item.path}
             label={item.label}
-            onPress={() => router.replace(item.route)}
+            onPress={() => navigate(item.route, item.path)}
           />
         ))}
 
@@ -55,7 +63,7 @@ export function BottomNavigation() {
           active={pathname === destinations[2].path}
           icon={destinations[2].icon}
           label={destinations[2].label}
-          onPress={() => router.replace(destinations[2].route)}
+          onPress={() => navigate(destinations[2].route, destinations[2].path)}
         />
       </View>
     </View>

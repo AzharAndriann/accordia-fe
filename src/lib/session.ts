@@ -84,7 +84,7 @@ export async function restoreSession() {
 
   try {
     const stored = JSON.parse(raw) as StoredSession;
-    if (!stored.accessToken || !stored.user || stored.expiresAt <= Date.now()) {
+    if (!stored.accessToken || !stored.refreshToken || !stored.user) {
       await clearSession();
       return getSessionSnapshot();
     }

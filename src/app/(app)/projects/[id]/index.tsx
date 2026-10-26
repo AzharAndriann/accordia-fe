@@ -45,7 +45,7 @@ export default function ProjectDetailScreen() {
   const project = projectQuery.data;
   const actions = [
     ...(project.role === 'FREELANCER'
-      ? [{ label: 'Undang klien', description: 'Kirim tautan undangan proyek', route: 'invite' }]
+      ? [{ label: 'Undang klien', description: 'Kirim dan pantau undangan klien', route: 'invite' }]
       : []),
     { label: 'Kesepakatan', description: 'Ruang lingkup, nilai, dan tenggat', route: 'agreement' },
     { label: 'Perubahan', description: 'Permintaan perubahan pekerjaan', route: 'changes' },

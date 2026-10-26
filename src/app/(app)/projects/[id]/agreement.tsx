@@ -1,7 +1,7 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useLocalSearchParams } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ActionButton, Card, EmptyState, Field, InlineNotice, SectionLabel } from '@/components/ui';
@@ -106,12 +106,17 @@ export default function AgreementScreen() {
             <Text style={styles.title}>Kesepakatan</Text>
             <Text style={styles.description}>Setiap perubahan tersimpan sebagai versi yang bisa ditinjau kedua pihak.</Text>
           </View>
-          {projectQuery.data?.role === 'FREELANCER' && formMode === 'closed' ? (
-            <Pressable onPress={() => { setEditing(null); setFormMode('create'); }} style={styles.smallButton}>
-              <Text style={styles.smallButtonText}>+ Draft</Text>
-            </Pressable>
-          ) : null}
         </View>
+
+        {projectQuery.data?.role === 'FREELANCER' && formMode === 'closed' ? (
+          <ActionButton
+            label="Buat draft kesepakatan"
+            onPress={() => {
+              setEditing(null);
+              setFormMode('create');
+            }}
+          />
+        ) : null}
 
         {changeRequestId && formMode === 'create' ? (
           <InlineNotice>Draft ini akan diajukan sebagai jawaban untuk permintaan perubahan.</InlineNotice>
@@ -356,12 +361,10 @@ const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: colors.background },
   loading: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.md, backgroundColor: colors.background },
   content: { padding: spacing.xl, paddingBottom: 48, gap: spacing.lg },
-  heading: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.md },
+  heading: { gap: spacing.md },
   headingCopy: { flex: 1, gap: spacing.xs },
   title: { color: colors.ink, ...typography.title },
   description: { color: colors.textMuted, ...typography.body },
-  smallButton: { borderRadius: radii.pill, backgroundColor: colors.primary, paddingHorizontal: 15, paddingVertical: 10 },
-  smallButtonText: { color: colors.white, fontSize: 13, fontWeight: '800' },
   list: { gap: spacing.md },
   formCard: { gap: spacing.lg },
   twoColumns: { gap: spacing.md },

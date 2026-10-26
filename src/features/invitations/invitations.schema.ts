@@ -10,8 +10,4 @@ export const createInvitationSchema = z.object({
     .transform((email) => email.toLowerCase()),
 });
 
-export const invitationTokenSchema = z
-  .string()
-  .regex(/^[A-Za-z0-9_-]{43}$/, 'Token undangan tidak valid');
-
 export type CreateInvitationForm = z.input<typeof createInvitationSchema>;
