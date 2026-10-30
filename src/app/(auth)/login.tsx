@@ -6,6 +6,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { ApiError } from '@/lib/api';
+import { showDynamicIslandToast } from '@/lib/dynamic-island-toast';
 import { AuthScreen } from '@/features/auth/auth-screen';
 import { FormError, FormField, SubmitButton } from '@/features/auth/auth-form-controls';
 import { login, loginSchema, saveAuthSession, type LoginForm } from '@/features/auth';
@@ -28,6 +29,11 @@ export default function LoginScreen() {
     mutationFn: login,
     async onSuccess(response) {
       await saveAuthSession(response.data);
+      const firstName = response.data.user.name.trim().split(/\s+/)[0];
+      showDynamicIslandToast({
+        title: firstName ? `Halo, ${firstName}!` : 'Login berhasil!',
+        message: 'Selamat datang kembali di Accordia.',
+      });
       router.replace((redirect?.startsWith('/') ? redirect : '/(app)/projects') as Href);
     },
   });

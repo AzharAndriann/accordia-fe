@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { AppState } from 'react-native';
 
 import { AnimatedSplash } from '@/components/animated-splash';
+import { DynamicIslandToast } from '@/components/dynamic-island-toast';
 import { AuthSessionProvider } from '@/features/auth';
 import { queryClient } from '@/lib/query-client';
 
@@ -31,6 +32,7 @@ export default function RootLayout() {
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
           <Stack.Screen name="(app)" options={{ headerShown: false }} />
         </Stack>
+        <DynamicIslandToast />
         {showSplash ? <AnimatedSplash onFinish={finishSplash} /> : null}
       </QueryClientProvider>
     </AuthSessionProvider>
