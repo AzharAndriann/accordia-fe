@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { Link } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { z } from 'zod';
@@ -41,6 +41,7 @@ export const acceptPolicies = (input: Consent) => authenticatedRequest('/auth/co
 });
 
 export function ConsentFields({ value, onChange }: { value: Consent; onChange: (value: Consent) => void }) {
+  const router = useRouter();
   const query = useQuery({ queryKey: ['public-policies'], queryFn: fetchPolicies });
   const version = query.data?.data.version;
   const set = (patch: Partial<Consent>) => onChange({
@@ -89,17 +90,19 @@ export function ConsentFields({ value, onChange }: { value: Consent; onChange: (
           <View style={styles.policyMark}><View style={styles.policyMarkLine} /></View>
           <View style={styles.policyHeadingCopy}>
             <Text style={styles.policyTitle}>Syarat & privasi</Text>
-            <Text style={styles.policyDescription}>Baca dokumen sebelum memberikan persetujuan.</Text>
+            <Text style={styles.policyDescription}>
+              Baca dokumen sebelum memberikan persetujuan{version ? ` · Versi ${version}` : ''}.
+            </Text>
           </View>
         </View>
-        <Link href="/policies" asChild>
-          <Pressable style={({ pressed }) => [styles.policyLink, pressed ? styles.pressed : null]}>
-            <Text style={styles.policyLinkText}>
-              Baca dokumen kebijakan{version ? ` · Versi ${version}` : ''}
-            </Text>
-            <Text style={styles.policyLinkArrow}>›</Text>
-          </Pressable>
-        </Link>
+        <Pressable
+          accessibilityRole="link"
+          onPress={() => router.push('/policies')}
+          style={({ pressed }) => [styles.policyLink, pressed ? styles.pressed : null]}
+        >
+          <Text style={styles.policyLinkText}>Baca dokumen kebijakan</Text>
+          <View style={styles.policyLinkArrowBox}><Text style={styles.policyLinkArrow}>›</Text></View>
+        </Pressable>
         <View style={styles.policyChecks}>
           <Check
             checked={value.acceptedTerms}
@@ -367,9 +370,10 @@ const styles = StyleSheet.create({
   policyHeadingCopy: { flex: 1, gap: 3 },
   policyTitle: { color: colors.ink, fontSize: 15, fontWeight: '800' },
   policyDescription: { color: colors.textMuted, fontSize: 11, lineHeight: 16 },
-  policyLink: { minHeight: 48, borderTopWidth: 1, borderBottomWidth: 1, borderColor: colors.divider, backgroundColor: colors.surfaceMuted, paddingHorizontal: spacing.lg, flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  policyLinkText: { flex: 1, color: colors.primary, fontSize: 12, fontWeight: '800' },
-  policyLinkArrow: { color: colors.primary, fontSize: 23 },
+  policyLink: { minHeight: 54, borderTopWidth: 1, borderBottomWidth: 1, borderColor: colors.divider, backgroundColor: colors.surfaceMuted, paddingHorizontal: spacing.lg, paddingVertical: spacing.sm, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: spacing.md },
+  policyLinkText: { flex: 1, flexShrink: 1, color: colors.primary, fontSize: 12, lineHeight: 18, fontWeight: '800' },
+  policyLinkArrowBox: { width: 28, height: 28, flexShrink: 0, borderRadius: 14, backgroundColor: colors.primarySoft, alignItems: 'center', justifyContent: 'center' },
+  policyLinkArrow: { color: colors.primary, fontSize: 22, lineHeight: 26 },
   policyChecks: { paddingHorizontal: spacing.md, paddingVertical: spacing.xs },
   check: { minHeight: 54, flexDirection: 'row', alignItems: 'flex-start', gap: spacing.md, paddingVertical: spacing.md },
   checkDisabled: { opacity: 0.42 },
