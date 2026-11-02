@@ -145,13 +145,14 @@ function PaymentForm({
   const [amount, setAmount] = useState('');
   const [note, setNote] = useState('');
   const [assets, setAssets] = useState<DocumentPickerAsset[]>([]);
+  const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const mutation = useMutation({
     mutationFn: async () => {
       if (!/^\d{1,18}$/.test(amount) || BigInt(amount) <= 0n) {
         throw new ApiError(422, 'INVALID_AMOUNT', 'Nominal harus lebih dari nol dan maksimal 18 digit');
       }
       if (assets.length === 0) throw new ApiError(422, 'FILE_REQUIRED', 'Bukti pembayaran wajib dipilih');
-      const files = (await uploadProjectFiles(projectId, assets)).data;
+      const files = (await uploadProjectFiles(projectId, assets, setUploadProgress)).data;
       return createPayment(projectId, {
         amountRupiah: BigInt(amount).toString(),
         fileIds: files.map((file) => file.id),
@@ -172,9 +173,10 @@ function PaymentForm({
       {error ? <InlineNotice tone="error">{error}</InlineNotice> : null}
       <Field inputMode="numeric" label="Nominal (Rupiah)" onChangeText={(text) => setAmount(text.replace(/\D/g, '').slice(0, 18))} placeholder="1000000" value={amount} />
       <Field label="Catatan" multiline onChangeText={setNote} placeholder="Contoh: Termin pertama" value={note} />
+      {mutation.isPending && uploadProgress !== null ? <InlineNotice>{uploadProgress < 100 ? `Mengunggah ${uploadProgress}%` : 'Upload selesai. Menyimpan data...'}</InlineNotice> : null}
       <FilePickerField assets={assets} disabled={mutation.isPending} label="Bukti pembayaran" onChange={setAssets} />
       <ActionButton label={mutation.isPending ? 'Mengunggah bukti...' : 'Kirim pembayaran'} loading={mutation.isPending} onPress={() => mutation.mutate()} />
-      <ActionButton label="Batal" onPress={onCancel} variant="secondary" />
+      <ActionButton disabled={mutation.isPending} label="Batal" onPress={onCancel} variant="secondary" />
     </Card>
   );
 }

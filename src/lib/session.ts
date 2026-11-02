@@ -1,19 +1,29 @@
+import { queryClient } from './query-client';
 import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 
 const REFRESH_TOKEN_KEY = 'accordia.refresh-token';
 const SESSION_KEY = 'accordia.session';
+let sessionEpoch = 0;
+export function getSessionEpoch() { return sessionEpoch; }
 let accessToken: string | null = null;
 let webRefreshToken: string | null = null;
 let currentUser: CurrentUser | null = null;
 let sessionExpiresAt: number | null = null;
 const listeners = new Set<() => void>();
+let storageQueue = Promise.resolve();
+function writeStorage(task: () => Promise<void>) {
+  const operation = storageQueue.then(task);
+  storageQueue = operation.catch(() => undefined);
+  return operation;
+}
 
 export type CurrentUser = {
   id: string;
   email: string;
   name: string;
   role: 'FREELANCER' | 'CLIENT';
+  needsConsent?: boolean;
 };
 
 type StoredSession = {
@@ -43,6 +53,11 @@ function emitSessionChange() {
 }
 
 function applySession(session: StoredSession | null) {
+  if (!session || currentUser?.id !== session.user.id) {
+    sessionEpoch++;
+    void queryClient.cancelQueries();
+    queryClient.clear();
+  }
   accessToken = session?.accessToken ?? null;
   webRefreshToken = session?.refreshToken ?? null;
   currentUser = session?.user ?? null;
@@ -98,8 +113,10 @@ export async function restoreSession() {
 export async function persistSession(session: StoredSession) {
   applySession(session);
   if (Platform.OS !== 'web') {
-    await SecureStore.setItemAsync(SESSION_KEY, JSON.stringify(session));
-    await SecureStore.setItemAsync(REFRESH_TOKEN_KEY, session.refreshToken);
+    await writeStorage(async () => {
+      await SecureStore.setItemAsync(SESSION_KEY, JSON.stringify(session));
+      await SecureStore.setItemAsync(REFRESH_TOKEN_KEY, session.refreshToken);
+    });
   }
 }
 
@@ -117,12 +134,17 @@ export async function setRefreshToken(token: string | null) {
   else await SecureStore.deleteItemAsync(REFRESH_TOKEN_KEY);
 }
 
+export async function updateSessionUser(user: CurrentUser) {
+  const refreshToken = await getRefreshToken();
+  if (!accessToken || !refreshToken || currentUser?.id !== user.id) return;
+  await persistSession({ user, accessToken, refreshToken, expiresAt: sessionExpiresAt ?? 0 });
+}
+
 export async function clearSession() {
   applySession(null);
   if (Platform.OS !== 'web') {
-    await Promise.all([
-      SecureStore.deleteItemAsync(SESSION_KEY),
-      SecureStore.deleteItemAsync(REFRESH_TOKEN_KEY),
-    ]);
+    await writeStorage(async () => {
+      await Promise.all([SecureStore.deleteItemAsync(SESSION_KEY), SecureStore.deleteItemAsync(REFRESH_TOKEN_KEY)]);
+    });
   }
 }

@@ -56,7 +56,7 @@ export default function ChangesScreen() {
   const requests = requestsQuery.data?.pages.flatMap((page) => page.data) ?? [];
   const error = projectQuery.error ?? requestsQuery.error ?? createMutation.error;
   const errorMessage = error instanceof ApiError ? error.message : error ? 'Permintaan perubahan belum bisa dimuat.' : null;
-  const canRequest = projectQuery.data?.role === 'CLIENT' && Boolean(projectQuery.data.activeAgreementVersionId);
+  const canRequest = projectQuery.data?.status === 'ACTIVE' && projectQuery.data?.role === 'CLIENT' && Boolean(projectQuery.data.activeAgreementVersionId);
 
   if (projectQuery.isPending || requestsQuery.isPending) {
     return <LoadingState />;
@@ -156,8 +156,8 @@ function ChangeCard({
           <SectionLabel>PERBANDINGAN USULAN</SectionLabel>
           <ComparisonRow
             label="Nilai proyek"
-            before={`Rp${Number(request.comparison.amountRupiah.before).toLocaleString('id-ID')}`}
-            after={`Rp${Number(request.comparison.amountRupiah.after).toLocaleString('id-ID')}`}
+            before={`Rp${BigInt(request.comparison.amountRupiah.before).toLocaleString('id-ID')}`}
+            after={`Rp${BigInt(request.comparison.amountRupiah.after).toLocaleString('id-ID')}`}
           />
           <ComparisonRow
             label="Deadline"

@@ -300,7 +300,7 @@ function AgreementCard({
       </View>
       <Text style={styles.scope}>{version.scope}</Text>
       <View style={styles.summaryGrid}>
-        <Summary label="Nilai" value={`Rp${Number(version.amountRupiah).toLocaleString('id-ID')}`} />
+        <Summary label="Nilai" value={`Rp${BigInt(version.amountRupiah).toLocaleString('id-ID')}`} />
         <Summary label="Deadline" value={version.deadline} />
         <Summary label="Revisi" value={`${version.revisionLimit} kali`} />
         <Summary label="Persetujuan" value={`${version.approvalCount}/2 pihak`} />

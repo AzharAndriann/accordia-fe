@@ -1,4 +1,5 @@
-import { type Href, Redirect, Stack, useLocalSearchParams } from 'expo-router';
+import { postAuthRoute } from '@/lib/invitation-route';
+import { Redirect, Stack, useLocalSearchParams } from 'expo-router';
 import { ActivityIndicator } from 'react-native';
 
 import { useAuthSession } from '@/features/auth';
@@ -6,9 +7,9 @@ import { colors } from '@/theme';
 
 export default function AuthLayout() {
   const { isReady, user } = useAuthSession();
-  const { redirect } = useLocalSearchParams<{ redirect?: string }>();
+  const { invitationId } = useLocalSearchParams<{ invitationId?: string }>();
   if (!isReady) return <ActivityIndicator color={colors.primary} style={{ flex: 1 }} />;
-  if (user) return <Redirect href={(redirect?.startsWith('/') ? redirect : '/(app)') as Href} />;
+  if (user) return <Redirect href={postAuthRoute(invitationId, user.needsConsent)} />;
 
   return (
     <Stack screenOptions={{ headerShown: false, animation: 'fade_from_bottom' }}>

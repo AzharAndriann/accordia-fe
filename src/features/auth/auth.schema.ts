@@ -1,3 +1,4 @@
+import { consentSchema } from '@/features/policies';
 import { z } from 'zod';
 
 const emailSchema = z
@@ -29,6 +30,7 @@ export const registerSchema = z
       .string()
       .min(12, 'Password minimal 12 karakter')
       .max(128, 'Password maksimal 128 karakter'),
+    consent: consentSchema,
     confirmPassword: z.string().min(1, 'Konfirmasi password wajib diisi'),
   })
   .refine((value) => value.password === value.confirmPassword, {

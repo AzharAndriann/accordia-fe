@@ -4,6 +4,9 @@ import {
   getAccessToken,
   getRefreshToken,
   getSessionSnapshot,
+  getSessionEpoch,
+  getCurrentUser,
+  setCurrentUser,
   persistSession,
   type CurrentUser,
 } from '@/lib/session';
@@ -41,6 +44,7 @@ export async function apiRequest<T>(
   path: string,
   options: RequestInit & { accessToken?: string } = {},
 ): Promise<T> {
+  const epoch = getSessionEpoch();
   const { accessToken, headers, ...requestOptions } = options;
   const isFormData = typeof FormData !== 'undefined' && requestOptions.body instanceof FormData;
   let requestToken = accessToken;
@@ -50,8 +54,11 @@ export async function apiRequest<T>(
     && (getSessionSnapshot().expiresAt ?? 0) <= Date.now()
   ) {
     requestToken = (await refreshAccessToken()) ?? undefined;
+    if (!requestToken) throw new ApiError(getAccessToken() ? 0 : 401, 'SESSION_REFRESH_FAILED', 'Sesi belum dapat diperbarui. Coba lagi.');
   }
-  const send = (token?: string) => fetch(`${getApiBaseUrl()}${path}`, {
+  const send = (token?: string) => {
+    if (accessToken && getSessionEpoch() !== epoch) throw new ApiError(401, 'SESSION_CHANGED', 'Sesi telah berubah');
+    return fetch(`${getApiBaseUrl()}${path}`, {
       ...requestOptions,
       headers: {
         Accept: 'application/json',
@@ -60,14 +67,19 @@ export async function apiRequest<T>(
         ...headers,
       },
     });
+  };
   let response = await send(requestToken);
   if (response.status === 401 && requestToken && path !== '/auth/refresh') {
+    if (getSessionEpoch() !== epoch) throw new ApiError(401, 'SESSION_CHANGED', 'Sesi telah berubah');
     const refreshedToken = await refreshAccessToken();
     if (refreshedToken) response = await send(refreshedToken);
   }
+  if (accessToken && getSessionEpoch() !== epoch) throw new ApiError(401, 'SESSION_CHANGED', 'Sesi telah berubah');
   const payload = (await response.json().catch(() => null)) as ApiErrorBody | T | null;
   if (!response.ok) {
+    if (response.status === 401 && requestToken) await clearSession();
     const apiError = payload && typeof payload === 'object' && 'error' in payload ? payload.error : null;
+    if (apiError?.code === 'CONSENT_REQUIRED') { const user = getCurrentUser(); if (user) setCurrentUser({ ...user, needsConsent: true }); }
     throw new ApiError(response.status, apiError?.code ?? 'API_ERROR', apiError?.message ?? 'Request gagal');
   }
   return payload as T;
@@ -76,6 +88,7 @@ export async function apiRequest<T>(
 async function refreshAccessToken() {
   if (refreshPromise) return refreshPromise;
   refreshPromise = (async () => {
+    const epoch = getSessionEpoch();
     const refreshToken = await getRefreshToken();
     if (!refreshToken) {
       await clearSession();
@@ -91,6 +104,7 @@ async function refreshAccessToken() {
         | ApiSuccess<RefreshedSession>
         | ApiErrorBody
         | null;
+      if (getSessionEpoch() !== epoch) return null;
       if (!response.ok || !payload || !('data' in payload)) {
         await clearSession();
         return null;
@@ -109,6 +123,17 @@ async function refreshAccessToken() {
     refreshPromise = null;
   });
   return refreshPromise;
+}
+
+export async function getAuthenticatedToken(forceRefresh = false) {
+  if (forceRefresh || (getSessionSnapshot().expiresAt ?? 0) <= Date.now()) {
+    const token = await refreshAccessToken();
+    if (token) return token;
+    throw new ApiError(getAccessToken() ? 0 : 401, 'SESSION_REFRESH_FAILED', 'Sesi belum dapat diperbarui');
+  }
+  const token = getAccessToken();
+  if (!token) throw new ApiError(401, 'UNAUTHENTICATED', 'Silakan masuk kembali');
+  return token;
 }
 
 export function authenticatedRequest<T>(path: string, options?: RequestInit) {

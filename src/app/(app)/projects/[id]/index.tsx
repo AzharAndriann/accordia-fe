@@ -51,6 +51,7 @@ export default function ProjectDetailScreen() {
     { label: 'Perubahan', description: 'Permintaan perubahan pekerjaan', route: 'changes' },
     { label: 'Penyerahan', description: 'Hasil kerja dan revisi', route: 'deliveries' },
     { label: 'Pembayaran', description: 'Riwayat dan bukti pembayaran', route: 'payments' },
+    { label: 'Pembatalan & sengketa', description: 'Permintaan dan solusi bersama', route: 'requests' },
     { label: 'Aktivitas', description: 'Riwayat perubahan proyek', route: 'activity' },
   ];
 

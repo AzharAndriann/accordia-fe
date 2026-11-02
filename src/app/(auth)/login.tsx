@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { type Href, Link, useLocalSearchParams, useRouter } from 'expo-router';
+import { postAuthRoute } from '@/lib/invitation-route';
+import { Link, useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -14,7 +15,7 @@ import { colors } from '@/theme';
 
 export default function LoginScreen() {
   const router = useRouter();
-  const { redirect } = useLocalSearchParams<{ redirect?: string }>();
+  const { invitationId } = useLocalSearchParams<{ invitationId?: string }>();
   const [showPassword, setShowPassword] = useState(false);
   const {
     control,
@@ -34,7 +35,7 @@ export default function LoginScreen() {
         title: firstName ? `Halo, ${firstName}!` : 'Login berhasil!',
         message: 'Selamat datang kembali di Accordia.',
       });
-      router.replace((redirect?.startsWith('/') ? redirect : '/(app)/projects') as Href);
+      router.replace(postAuthRoute(invitationId, response.data.user.needsConsent));
     },
   });
 
@@ -53,7 +54,7 @@ export default function LoginScreen() {
       footer={
         <View style={styles.footerRow}>
           <Text style={styles.footerText}>Belum punya akun?</Text>
-          <Link href="/(auth)/register" asChild>
+          <Link href={{ pathname: "/(auth)/register", params: invitationId ? { invitationId } : {} }} asChild>
             <Pressable accessibilityRole="link" hitSlop={8}>
               <Text style={styles.footerLink}>Daftar sekarang</Text>
             </Pressable>

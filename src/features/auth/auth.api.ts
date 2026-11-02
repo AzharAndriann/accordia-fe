@@ -1,5 +1,5 @@
-import { apiRequest } from '@/lib/api';
-import { persistSession } from '@/lib/session';
+import { authenticatedRequest , apiRequest } from '@/lib/api';
+import { clearSession , persistSession } from '@/lib/session';
 import type { ApiSuccess } from '@/types/api';
 
 import type { AuthRole, LoginForm, RegisterForm } from './auth.schema';
@@ -16,6 +16,7 @@ export type AuthUser = {
   role: AuthRole;
   emailVerifiedAt: string | null;
   createdAt: string;
+  needsConsent: boolean;
 };
 
 export type AuthResult = {
@@ -26,7 +27,7 @@ export type AuthResult = {
   expiresIn: number;
 };
 
-type RegisterPayload = Pick<RegisterForm, 'name' | 'email' | 'role' | 'password'>;
+type RegisterPayload = Pick<RegisterForm, 'name' | 'email' | 'role' | 'password' | 'consent'>;
 
 export function login(input: LoginForm) {
   return apiRequest<ApiSuccess<AuthResult>>(authRoutes.login, {
@@ -41,12 +42,18 @@ export function register(input: RegisterForm) {
     email: input.email,
     role: input.role,
     password: input.password,
+    consent: input.consent,
   };
 
   return apiRequest<ApiSuccess<AuthResult>>(authRoutes.register, {
     method: 'POST',
     body: JSON.stringify(payload),
   });
+}
+
+export async function logoutSession() {
+  await authenticatedRequest('/auth/logout', { method: 'POST' });
+  await clearSession();
 }
 
 export async function saveAuthSession(result: AuthResult) {

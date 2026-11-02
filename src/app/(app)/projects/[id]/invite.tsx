@@ -1,7 +1,4 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useLocalSearchParams } from 'expo-router';
-import {
+import { Share ,
   ActivityIndicator,
   Alert,
   RefreshControl,
@@ -10,6 +7,9 @@ import {
   Text,
   View,
 } from 'react-native';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useLocalSearchParams } from 'expo-router';
 import { Controller, useForm } from 'react-hook-form';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -273,6 +273,7 @@ function InvitationItem({
         <Text style={styles.dateText}>Dikirim {formatDate(invitation.createdAt)}</Text>
         <Text style={styles.dateText}>{getActivityDate(invitation)}</Text>
       </View>
+      {invitation.status === 'PENDING' ? <ActionButton label="Bagikan tautan undangan" variant="secondary" onPress={() => { void Share.share({ message: `Buka undangan Accordia: accordia://invitations/${invitation.id}` }); }} /> : null}
       {invitation.status === 'PENDING' ? (
         <ActionButton
           label={cancelling ? 'Membatalkan...' : 'Batalkan undangan'}

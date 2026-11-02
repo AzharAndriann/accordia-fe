@@ -34,11 +34,14 @@ export default function AppLayout() {
 
   if (!isReady) return <ActivityIndicator color={colors.primary} style={{ flex: 1 }} />;
   if (!user) return <Redirect href="/(auth)/login" />;
+  if (user.needsConsent !== false) return <Redirect href="/consent" />;
 
   return (
     <View style={{ flex: 1 }}>
       <Stack>
         <Stack.Screen name="index" options={{ ...tabOptions, title: 'Beranda' }} />
+        <Stack.Screen name="notification-settings" options={{ header: () => renderHeader('Notifikasi perangkat'), title: 'Notifikasi perangkat' }} />
+        <Stack.Screen name="projects/[id]/requests" options={{ header: () => renderHeader('Pembatalan & sengketa'), title: 'Pembatalan & sengketa' }} />
         <Stack.Screen name="account" options={{ ...tabOptions, title: 'Akun' }} />
         <Stack.Screen name="projects/index" options={{ ...tabOptions, title: 'Proyek' }} />
         <Stack.Screen

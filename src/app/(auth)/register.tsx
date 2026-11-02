@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { Link, useRouter } from 'expo-router';
+import { postAuthRoute } from '@/lib/invitation-route';
+import { Link, useRouter, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -14,10 +15,12 @@ import {
   SubmitButton,
 } from '@/features/auth/auth-form-controls';
 import { register, registerSchema, saveAuthSession, type RegisterForm } from '@/features/auth';
+import { ConsentFields, emptyConsent } from '@/features/policies';
 import { colors } from '@/theme';
 
 export default function RegisterScreen() {
   const router = useRouter();
+  const { invitationId } = useLocalSearchParams<{ invitationId?: string }>();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const {
@@ -27,6 +30,7 @@ export default function RegisterScreen() {
   } = useForm<RegisterForm>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
+      consent: emptyConsent,
       name: '',
       email: '',
       password: '',
@@ -38,7 +42,7 @@ export default function RegisterScreen() {
     mutationFn: register,
     async onSuccess(response) {
       await saveAuthSession(response.data);
-      router.replace('/(app)/projects');
+      router.replace(postAuthRoute(invitationId, response.data.user.needsConsent));
     },
   });
 
@@ -56,7 +60,7 @@ export default function RegisterScreen() {
       footer={
         <View style={styles.footerRow}>
           <Text style={styles.footerText}>Sudah punya akun?</Text>
-          <Link href="/(auth)/login" asChild>
+          <Link href={{ pathname: "/(auth)/login", params: invitationId ? { invitationId } : {} }} asChild>
             <Pressable accessibilityRole="link" hitSlop={8}>
               <Text style={styles.footerLink}>Masuk</Text>
             </Pressable>
@@ -152,6 +156,8 @@ export default function RegisterScreen() {
         )}
       />
 
+      <Controller control={control} name="consent" render={({ field: { value, onChange } }) => <ConsentFields value={value} onChange={onChange} />} />
+      <FormError message={errors.consent ? 'Periksa tanggal lahir dan semua persetujuan.' : undefined} />
       <SubmitButton
         isLoading={registerMutation.isPending}
         label="Buat akun"
@@ -159,9 +165,7 @@ export default function RegisterScreen() {
         onPress={submit}
       />
 
-      <Text style={styles.terms}>
-        Dengan mendaftar, kamu menyetujui penggunaan data untuk operasional layanan Accordia.
-      </Text>
+
     </AuthScreen>
   );
 }

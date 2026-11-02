@@ -1,10 +1,13 @@
+import { useState } from 'react';
+import { Link , useRouter } from 'expo-router';
+import { ActionButton, InlineNotice } from '@/components/ui';
+import { logoutSession } from '@/features/auth/auth.api';
 import { useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'expo-router';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { projectRoleLabel } from '@/features/projects';
-import { clearSession, getCurrentUser } from '@/lib/session';
+import { getCurrentUser } from '@/lib/session';
 import { colors } from '@/theme';
 
 export default function AccountScreen() {
@@ -12,10 +15,13 @@ export default function AccountScreen() {
   const queryClient = useQueryClient();
   const currentUser = getCurrentUser();
 
+  const [loggingOut, setLoggingOut] = useState(false);
+  const [logoutError, setLogoutError] = useState('');
   async function logout() {
-    await clearSession();
-    queryClient.clear();
-    router.replace('/(auth)/login');
+    setLoggingOut(true); setLogoutError('');
+    try { await logoutSession(); queryClient.clear(); router.replace('/(auth)/login'); }
+    catch { setLogoutError('Sesi server belum dapat dicabut. Periksa koneksi lalu coba lagi.'); }
+    finally { setLoggingOut(false); }
   }
 
   return (
@@ -51,13 +57,11 @@ export default function AccountScreen() {
           </View>
         </View>
 
-        <Pressable
-          accessibilityRole="button"
-          onPress={() => void logout()}
-          style={({ pressed }) => [styles.logoutButton, pressed ? styles.pressed : null]}
-        >
-          <Text style={styles.logoutText}>Keluar dari akun</Text>
-        </Pressable>
+        <Link href="/policies" style={{ color: colors.primary }}>Syarat penggunaan dan kebijakan privasi</Link>
+        <Link href="/(app)/notification-settings" style={{ color: colors.primary }}>Pengaturan notifikasi</Link>
+        {logoutError ? <InlineNotice tone="error">{logoutError}</InlineNotice> : null}
+        <ActionButton label="Keluar dari akun" loading={loggingOut} onPress={() => void logout()} variant="danger" />
+
       </ScrollView>
     </SafeAreaView>
   );

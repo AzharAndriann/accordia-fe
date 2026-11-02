@@ -47,7 +47,7 @@ export default function DeliveriesScreen() {
   const deliveries = deliveriesQuery.data?.pages.flatMap((page) => page.data) ?? [];
   const error = projectQuery.error ?? deliveriesQuery.error;
   const errorMessage = error instanceof ApiError ? error.message : error ? 'Penyerahan belum bisa dimuat.' : null;
-  const canSubmit = projectQuery.data?.role === 'FREELANCER' && Boolean(projectQuery.data.activeAgreementVersionId);
+  const canSubmit = projectQuery.data?.status === 'ACTIVE' && projectQuery.data?.role === 'FREELANCER' && Boolean(projectQuery.data.activeAgreementVersionId);
 
   async function refresh() {
     await Promise.all([
@@ -119,6 +119,7 @@ function DeliveryForm({
   const [note, setNote] = useState('');
   const [linksText, setLinksText] = useState('');
   const [assets, setAssets] = useState<DocumentPickerAsset[]>([]);
+  const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
   const mutation = useMutation({
     mutationFn: async () => {
@@ -127,9 +128,9 @@ function DeliveryForm({
       if (links.length > 10) throw new ApiError(422, 'TOO_MANY_LINKS', 'Maksimal 10 tautan');
       if (new Set(links).size !== links.length) throw new ApiError(422, 'DUPLICATE_LINK', 'Tautan tidak boleh duplikat');
       if (links.some((link) => {
-        try { new URL(link); return false; } catch { return true; }
+        try { return !['http:', 'https:'].includes(new URL(link).protocol); } catch { return true; }
       })) throw new ApiError(422, 'INVALID_LINK', 'Pastikan semua tautan diawali http:// atau https://');
-      const uploaded = assets.length > 0 ? (await uploadProjectFiles(projectId, assets)).data : [];
+      const uploaded = assets.length > 0 ? (await uploadProjectFiles(projectId, assets, setUploadProgress)).data : [];
       return createDelivery(projectId, {
         agreementVersionId,
         note: note.trim(),
@@ -151,9 +152,10 @@ function DeliveryForm({
       {error ? <InlineNotice tone="error">{error}</InlineNotice> : null}
       <Field label="Catatan" multiline onChangeText={setNote} placeholder="Ringkasan hasil atau petunjuk peninjauan" value={note} />
       <Field label="Tautan hasil (satu per baris)" multiline onChangeText={(text) => { setLinksText(text); setValidationError(null); }} placeholder={'https://contoh.com/hasil\nhttps://contoh.com/demo'} value={linksText} />
+      {mutation.isPending && uploadProgress !== null ? <InlineNotice>{uploadProgress < 100 ? `Mengunggah ${uploadProgress}%` : 'Upload selesai. Menyimpan data...'}</InlineNotice> : null}
       <FilePickerField assets={assets} disabled={mutation.isPending} onChange={setAssets} />
       <ActionButton label={mutation.isPending ? 'Mengunggah dan mengirim...' : 'Kirim hasil'} loading={mutation.isPending} onPress={() => { setValidationError(null); mutation.mutate(); }} />
-      <ActionButton label="Batal" onPress={onCancel} variant="secondary" />
+      <ActionButton disabled={mutation.isPending} label="Batal" onPress={onCancel} variant="secondary" />
     </Card>
   );
 }

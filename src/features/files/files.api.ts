@@ -1,10 +1,10 @@
+import { getSessionEpoch } from '@/lib/session';
 import type { DocumentPickerAsset } from 'expo-document-picker';
 import { File, Paths } from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { Platform } from 'react-native';
 
-import { ApiError, authenticatedRequest, getApiBaseUrl } from '@/lib/api';
-import { getAccessToken } from '@/lib/session';
+import { ApiError, getAuthenticatedToken, getApiBaseUrl } from '@/lib/api';
 import type { ApiSuccess } from '@/types/api';
 
 import type { ProjectFile } from './files.types';
@@ -25,7 +25,8 @@ export function validatePickedFiles(assets: DocumentPickerAsset[]) {
   }
 }
 
-export function uploadProjectFiles(projectId: string, assets: DocumentPickerAsset[]) {
+export async function uploadProjectFiles(projectId: string, assets: DocumentPickerAsset[], onProgress?: (percent: number) => void) {
+  const epoch = getSessionEpoch();
   validatePickedFiles(assets);
   const form = new FormData();
   for (const asset of assets) {
@@ -39,16 +40,44 @@ export function uploadProjectFiles(projectId: string, assets: DocumentPickerAsse
       } as unknown as Blob);
     }
   }
-  return authenticatedRequest<ApiSuccess<ProjectFile[]>>(`/projects/${projectId}/files`, {
-    method: 'POST',
-    body: form,
+  const send = (token: string) => new Promise<ApiSuccess<ProjectFile[]>>((resolve, reject) => {
+    const request = new XMLHttpRequest();
+    request.open('POST', `${getApiBaseUrl()}/projects/${projectId}/files`);
+    request.timeout = 120_000;
+    request.setRequestHeader('Authorization', `Bearer ${token}`);
+    request.setRequestHeader('Accept', 'application/json');
+    request.upload.onprogress = (event) => {
+      if (event.lengthComputable && event.total) onProgress?.(Math.min(99, Math.round(event.loaded * 100 / event.total)));
+    };
+    request.onerror = () => reject(new ApiError(0, 'UPLOAD_NETWORK_ERROR', 'Upload gagal. Periksa koneksi dan coba lagi.'));
+    request.ontimeout = () => reject(new ApiError(0, 'UPLOAD_TIMEOUT', 'Upload melewati batas waktu. Coba lagi.'));
+    request.onabort = () => reject(new ApiError(0, 'UPLOAD_ABORTED', 'Upload dibatalkan'));
+    request.onload = () => {
+      let body;
+      try { body = JSON.parse(request.responseText); }
+      catch { reject(new ApiError(request.status, 'INVALID_RESPONSE', 'Respons upload tidak valid')); return; }
+      if (request.status < 200 || request.status >= 300) {
+        reject(new ApiError(request.status, body?.error?.code ?? 'UPLOAD_FAILED', body?.error?.message ?? 'Upload gagal')); return;
+      }
+      onProgress?.(100);
+      resolve(body);
+    };
+    request.send(form);
   });
+  onProgress?.(0);
+  try { return await send(await getAuthenticatedToken()); }
+  catch (error) {
+    if (getSessionEpoch() !== epoch) throw new ApiError(401, 'SESSION_CHANGED', 'Sesi telah berubah');
+    if (!(error instanceof ApiError) || error.status !== 401) throw error;
+    onProgress?.(0);
+    return send(await getAuthenticatedToken(true));
+  }
 }
 
 export async function downloadProjectFile(
   file: Pick<ProjectFile, 'id' | 'originalName' | 'mimeType'>,
 ) {
-  const accessToken = getAccessToken();
+  const accessToken = await getAuthenticatedToken();
   if (!accessToken) throw new ApiError(401, 'UNAUTHENTICATED', 'Silakan masuk kembali');
   if (Platform.OS === 'web') {
     throw new ApiError(400, 'DOWNLOAD_UNAVAILABLE', 'Download berautentikasi tersedia di aplikasi perangkat');

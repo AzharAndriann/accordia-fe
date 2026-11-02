@@ -5,6 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useState } from 'react';
 import { AppState } from 'react-native';
 
+import { PushListener } from '@/components/push-listener';
 import { AnimatedSplash } from '@/components/animated-splash';
 import { DynamicIslandToast } from '@/components/dynamic-island-toast';
 import { AuthSessionProvider } from '@/features/auth';
@@ -33,6 +34,7 @@ export default function RootLayout() {
           <Stack.Screen name="(app)" options={{ headerShown: false }} />
         </Stack>
         <DynamicIslandToast />
+        <PushListener />
         {showSplash ? <AnimatedSplash onFinish={finishSplash} /> : null}
       </QueryClientProvider>
     </AuthSessionProvider>

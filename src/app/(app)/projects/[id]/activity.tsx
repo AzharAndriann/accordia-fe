@@ -9,6 +9,17 @@ import { ApiError } from '@/lib/api';
 import { colors, spacing, typography } from '@/theme';
 
 const eventCopy: Record<AuditEventType, { title: string; description: string }> = {
+  INVITATION_CANCELLED: { title: 'Undangan dibatalkan', description: 'Keputusan dan perubahan tercatat dalam proyek.' },
+  MEMBERSHIP_REMOVAL_REQUESTED: { title: 'Pelepasan klien diminta', description: 'Keputusan dan perubahan tercatat dalam proyek.' },
+  MEMBERSHIP_REMOVAL_APPROVED: { title: 'Pelepasan klien disetujui', description: 'Keputusan dan perubahan tercatat dalam proyek.' },
+  MEMBERSHIP_REMOVAL_REJECTED: { title: 'Pelepasan klien ditolak', description: 'Keputusan dan perubahan tercatat dalam proyek.' },
+  PROJECT_REQUEST_CREATED: { title: 'Permintaan proyek dibuat', description: 'Keputusan dan perubahan tercatat dalam proyek.' },
+  PROJECT_RESOLUTION_PROPOSED: { title: 'Solusi sengketa diajukan', description: 'Keputusan dan perubahan tercatat dalam proyek.' },
+  PROJECT_REQUEST_APPROVED: { title: 'Permintaan disetujui', description: 'Keputusan dan perubahan tercatat dalam proyek.' },
+  PROJECT_REQUEST_REJECTED: { title: 'Usulan ditolak', description: 'Keputusan dan perubahan tercatat dalam proyek.' },
+  PROJECT_REQUEST_WITHDRAWN: { title: 'Permintaan ditarik', description: 'Keputusan dan perubahan tercatat dalam proyek.' },
+  PROJECT_CANCELLED: { title: 'Proyek dibatalkan', description: 'Keputusan dan perubahan tercatat dalam proyek.' },
+
   PROJECT_CREATED: { title: 'Proyek dibuat', description: 'Ruang kerja proyek mulai dibuat.' },
   INVITATION_CREATED: { title: 'Undangan dikirim', description: 'Klien diundang untuk bergabung.' },
   INVITATION_ACCEPTED: { title: 'Undangan diterima', description: 'Klien resmi bergabung ke proyek.' },
