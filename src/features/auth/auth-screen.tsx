@@ -11,6 +11,7 @@ import {
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { colors } from '@/theme';
+import { AccordiaWordmark } from '@/components/accordia-wordmark';
 
 type AuthScreenProps = PropsWithChildren<{
   title: string;
@@ -48,15 +49,7 @@ export function AuthScreen({
                 style={styles.heroBackground}
               />
               <View style={[styles.heroBrand, { marginTop: 24 + insets.top }]}>
-                <View style={styles.heroLogoHalo}>
-                  <Image
-                    accessibilityIgnoresInvertColors
-                    resizeMode="contain"
-                    source={require('../../../assets/images/accordia-splash-mark.png')}
-                    style={styles.heroLogo}
-                  />
-                </View>
-                <Text style={styles.heroBrandName}>accordia</Text>
+                <AccordiaWordmark width={158} />
               </View>
             </View>
 
@@ -89,11 +82,7 @@ export function AuthScreen({
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.brand}>
-            <View style={styles.logo}>
-              <View style={styles.logoRing} />
-              <View style={styles.logoDot} />
-            </View>
-            <Text style={styles.brandName}>accordia</Text>
+            <AccordiaWordmark tone="onLight" width={142} />
           </View>
 
           <View style={styles.heading}>
@@ -127,20 +116,6 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   heroBrand: { alignItems: 'center', zIndex: 2 },
-  heroLogoHalo: {
-    width: 76,
-    height: 76,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  heroLogo: { width: 72, height: 72 },
-  heroBrandName: {
-    color: colors.white,
-    fontSize: 21,
-    fontWeight: '800',
-    letterSpacing: -0.5,
-    marginTop: 2,
-  },
   heroBody: {
     flexGrow: 1,
     alignSelf: 'center',
@@ -200,32 +175,7 @@ const styles = StyleSheet.create({
     left: -105,
     bottom: 36,
   },
-  brand: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 42 },
-  logo: {
-    width: 34,
-    height: 34,
-    borderRadius: 11,
-    backgroundColor: colors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logoRing: {
-    width: 17,
-    height: 17,
-    borderRadius: 9,
-    borderWidth: 3,
-    borderColor: colors.white,
-  },
-  logoDot: {
-    position: 'absolute',
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: colors.gold,
-    right: 6,
-    top: 6,
-  },
-  brandName: { color: colors.inkDeep, fontSize: 21, fontWeight: '800', letterSpacing: -0.5 },
+  brand: { marginBottom: 42 },
   heading: { marginBottom: 24 },
   eyebrow: {
     color: colors.primaryAccent,

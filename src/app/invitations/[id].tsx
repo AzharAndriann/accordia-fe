@@ -4,6 +4,7 @@ import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-nat
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ActionButton, InlineNotice } from '@/components/ui';
+import { AccordiaWordmark } from '@/components/accordia-wordmark';
 import { useAuthSession } from '@/features/auth';
 import { acceptInvitation, invitationKeys } from '@/features/invitations';
 import { projectKeys } from '@/features/projects';
@@ -131,13 +132,7 @@ function InvitationHero() {
     <View style={styles.hero}>
       <View pointerEvents="none" style={styles.heroOrbLarge} />
       <View pointerEvents="none" style={styles.heroOrbSmall} />
-      <View style={styles.brandRow}>
-        <View style={styles.brandMark}>
-          <View style={styles.brandRing} />
-          <View style={styles.brandDot} />
-        </View>
-        <Text style={styles.brandName}>accordia</Text>
-      </View>
+      <AccordiaWordmark style={styles.wordmark} width={142} />
       <View style={styles.envelopeWrap}>
         <View style={styles.envelope}>
           <View style={styles.envelopeFoldLeft} />
@@ -297,11 +292,7 @@ const styles = StyleSheet.create({
   hero: { minHeight: 380, overflow: 'hidden', backgroundColor: colors.primary, paddingHorizontal: spacing.xxl, paddingTop: spacing.lg, paddingBottom: 54, alignItems: 'center' },
   heroOrbLarge: { position: 'absolute', width: 260, height: 260, borderRadius: 130, backgroundColor: colors.primaryBright, opacity: 0.26, right: -105, top: -100 },
   heroOrbSmall: { position: 'absolute', width: 150, height: 150, borderRadius: 75, borderWidth: 28, borderColor: colors.primaryHighlight, opacity: 0.18, left: -78, bottom: -25 },
-  brandRow: { alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', gap: 9 },
-  brandMark: { width: 31, height: 31, borderRadius: 10, backgroundColor: colors.white, alignItems: 'center', justifyContent: 'center' },
-  brandRing: { width: 15, height: 15, borderRadius: 8, borderWidth: 3, borderColor: colors.primary },
-  brandDot: { position: 'absolute', width: 6, height: 6, borderRadius: 3, right: 5, top: 5, backgroundColor: colors.gold },
-  brandName: { color: colors.white, fontSize: 20, fontWeight: '800', letterSpacing: -0.5 },
+  wordmark: { alignSelf: 'flex-start' },
   envelopeWrap: { width: 86, height: 86, borderRadius: 30, backgroundColor: 'rgba(255,255,255,0.12)', alignItems: 'center', justifyContent: 'center', marginTop: 27, marginBottom: 18, transform: [{ rotate: '-3deg' }] },
   envelope: { width: 53, height: 39, borderRadius: 8, backgroundColor: colors.white, overflow: 'hidden' },
   envelopeFoldLeft: { position: 'absolute', width: 39, height: 39, backgroundColor: colors.primarySoft, transform: [{ rotate: '42deg' }], left: -20, top: -14 },
