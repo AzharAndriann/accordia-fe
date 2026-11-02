@@ -1,4 +1,4 @@
-import { Share ,
+import { Share,
   ActivityIndicator,
   Alert,
   RefreshControl,
@@ -137,14 +137,27 @@ export default function InviteClientScreen() {
         }
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.heading}>
-          <Text style={styles.title}>Undang klien</Text>
+        <View style={styles.inviteHero}>
+          <View pointerEvents="none" style={styles.heroOrb} />
+          <View style={styles.heroLabel}>
+            <Text style={styles.heroLabelText}>KOLABORASI PROYEK</Text>
+          </View>
+          <Text style={styles.title}>Ajak klien masuk{`\n`}ke ruang kerja.</Text>
           <Text style={styles.description}>
-            Kirim undangan dan pantau respons klien untuk proyek ini.
+            Satu undangan untuk menyatukan percakapan, kesepakatan, dan progres proyek.
           </Text>
+          <View style={styles.peopleRow}>
+            <View style={[styles.person, styles.personOwner]}><Text style={styles.personOwnerText}>A</Text></View>
+            <View style={[styles.person, styles.personClient]}><Text style={styles.personClientText}>+</Text></View>
+            <Text style={styles.peopleCopy}>Kamu dan klien, dalam satu tempat</Text>
+          </View>
         </View>
 
         <Card style={styles.formCard}>
+          <View style={styles.formIntro}>
+            <Text style={styles.formTitle}>Siapa yang ingin kamu ajak?</Text>
+            <Text style={styles.formDescription}>Kami akan mengirim undangan khusus ke email klien.</Text>
+          </View>
           {mutationErrorMessage ? (
             <InlineNotice tone="error">{mutationErrorMessage}</InlineNotice>
           ) : null}
@@ -260,8 +273,11 @@ function InvitationItem({
   return (
     <Card style={styles.invitationCard}>
       <View style={styles.cardTop}>
+        <View style={styles.emailAvatar}>
+          <Text style={styles.emailAvatarText}>{invitation.targetEmail.charAt(0).toUpperCase()}</Text>
+        </View>
         <View style={styles.cardCopy}>
-          <SectionLabel>EMAIL KLIEN</SectionLabel>
+          <SectionLabel>KLIEN</SectionLabel>
           <Text style={styles.email}>{invitation.targetEmail}</Text>
         </View>
         <StatusBadge status={invitation.status} />
@@ -339,10 +355,23 @@ function getActivityDate(invitation: ProjectInvitation) {
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: colors.background },
   content: { padding: spacing.xl, paddingBottom: 48, gap: spacing.xl },
-  heading: { gap: spacing.sm },
-  title: { color: colors.ink, ...typography.title },
-  description: { color: colors.textMuted, ...typography.body },
-  formCard: { gap: spacing.lg },
+  inviteHero: { minHeight: 255, overflow: 'hidden', borderRadius: radii.xl, backgroundColor: colors.primary, padding: spacing.xl, justifyContent: 'flex-end' },
+  heroOrb: { position: 'absolute', width: 210, height: 210, borderRadius: 105, borderWidth: 36, borderColor: colors.primaryHighlight, opacity: 0.17, right: -86, top: -83 },
+  heroLabel: { alignSelf: 'flex-start', borderRadius: radii.pill, backgroundColor: 'rgba(255,255,255,0.13)', paddingHorizontal: 11, paddingVertical: 7, marginBottom: spacing.lg },
+  heroLabelText: { color: '#DCEDE8', fontSize: 9, fontWeight: '900', letterSpacing: 1.35 },
+  title: { color: colors.white, fontSize: 29, lineHeight: 35, fontWeight: '800', letterSpacing: -0.8 },
+  description: { color: '#DCEDE8', fontSize: 13, lineHeight: 20, maxWidth: 340, marginTop: spacing.sm },
+  peopleRow: { flexDirection: 'row', alignItems: 'center', marginTop: spacing.lg },
+  person: { width: 30, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: colors.primary },
+  personOwner: { backgroundColor: colors.white },
+  personClient: { backgroundColor: colors.gold, marginLeft: -7 },
+  personOwnerText: { color: colors.primary, fontSize: 11, fontWeight: '900' },
+  personClientText: { color: colors.inkDeep, fontSize: 16, fontWeight: '800', marginTop: -1 },
+  peopleCopy: { color: '#DCEDE8', fontSize: 10, fontWeight: '700', marginLeft: spacing.sm },
+  formCard: { gap: spacing.lg, borderWidth: 0, borderRadius: radii.xl, shadowColor: colors.inkShadow, shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.07, shadowRadius: 20, elevation: 3 },
+  formIntro: { gap: 4 },
+  formTitle: { color: colors.ink, fontSize: 18, lineHeight: 24, fontWeight: '800' },
+  formDescription: { color: colors.textMuted, fontSize: 12, lineHeight: 18 },
   retryCard: { gap: spacing.md },
   listHeading: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   listHeadingCopy: { flex: 1, gap: 3 },
@@ -356,8 +385,10 @@ const styles = StyleSheet.create({
   emptyTitle: { color: colors.inkSoft, fontSize: 17, fontWeight: '800' },
   emptyDescription: { color: colors.textMuted, ...typography.body, textAlign: 'center' },
   list: { gap: spacing.md },
-  invitationCard: { gap: spacing.md },
+  invitationCard: { gap: spacing.md, borderWidth: 0, borderRadius: radii.xl, shadowColor: colors.inkShadow, shadowOffset: { width: 0, height: 5 }, shadowOpacity: 0.055, shadowRadius: 14, elevation: 2 },
   cardTop: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.md },
+  emailAvatar: { width: 42, height: 42, borderRadius: 15, backgroundColor: colors.primarySoft, alignItems: 'center', justifyContent: 'center' },
+  emailAvatarText: { color: colors.primary, fontSize: 16, fontWeight: '900' },
   cardCopy: { flex: 1, gap: 4 },
   email: { color: colors.inkSoft, fontSize: 16, lineHeight: 22, fontWeight: '800' },
   status: { maxWidth: 140, borderRadius: radii.pill, paddingHorizontal: 10, paddingVertical: 6 },
