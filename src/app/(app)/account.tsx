@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link , useRouter } from 'expo-router';
-import { ActionButton, InlineNotice } from '@/components/ui';
+import { InlineNotice } from '@/components/ui';
+import { LogoutButton } from '@/components/logout-button';
 import { logoutSession } from '@/features/auth/auth.api';
 import { useQueryClient } from '@tanstack/react-query';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -60,7 +61,7 @@ export default function AccountScreen() {
         <Link href="/policies" style={{ color: colors.primary }}>Syarat penggunaan dan kebijakan privasi</Link>
         <Link href="/(app)/notification-settings" style={{ color: colors.primary }}>Pengaturan notifikasi</Link>
         {logoutError ? <InlineNotice tone="error">{logoutError}</InlineNotice> : null}
-        <ActionButton label="Keluar dari akun" loading={loggingOut} onPress={() => void logout()} variant="danger" />
+        <LogoutButton loading={loggingOut} onConfirm={() => void logout()} variant="card" />
 
       </ScrollView>
     </SafeAreaView>
@@ -85,7 +86,4 @@ const styles = StyleSheet.create({
   divider: { height: 1, backgroundColor: colors.divider },
   infoLabel: { color: colors.textMuted, fontSize: 13 },
   infoValue: { color: colors.inkSoft, fontSize: 13, fontWeight: '800' },
-  logoutButton: { minHeight: 52, borderWidth: 1, borderColor: colors.dangerBorder, borderRadius: 15, alignItems: 'center', justifyContent: 'center', marginTop: 4 },
-  logoutText: { color: colors.danger, fontSize: 14, fontWeight: '800' },
-  pressed: { opacity: 0.72 },
 });

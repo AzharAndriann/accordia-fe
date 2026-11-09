@@ -5,6 +5,7 @@ import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AccordiaWordmark } from '@/components/accordia-wordmark';
+import { LogoutButton } from '@/components/logout-button';
 import { ActionButton, InlineNotice } from '@/components/ui';
 import { useAuthSession } from '@/features/auth';
 import { logoutSession } from '@/features/auth/auth.api';
@@ -17,7 +18,7 @@ export default function ConsentScreen() {
   const { invitationId } = useLocalSearchParams<{ invitationId?: string }>();
   const { isReady, user } = useAuthSession();
   const [value, setValue] = useState(emptyConsent);
-  const [error, setError] = useState('');
+  const logoutMutation = useMutation({ mutationFn: logoutSession });
   const mutation = useMutation({
     mutationFn: async () => {
       const parsed = consentSchema.safeParse(value);
@@ -66,24 +67,25 @@ export default function ConsentScreen() {
 
             <ConsentFields value={value} onChange={setValue} />
 
-            {mutation.error || error ? (
-              <InlineNotice tone="error">{mutation.error?.message ?? error}</InlineNotice>
+            {mutation.error || logoutMutation.error ? (
+              <InlineNotice tone="error">
+                {logoutMutation.error
+                  ? 'Belum bisa keluar. Periksa koneksi lalu coba lagi.'
+                  : mutation.error?.message}
+              </InlineNotice>
             ) : null}
 
             <View style={styles.actions}>
               <ActionButton
                 label="Setuju dan lanjutkan"
+                disabled={logoutMutation.isPending}
                 loading={mutation.isPending}
                 onPress={() => mutation.mutate()}
               />
-              <ActionButton
+              <LogoutButton
                 disabled={mutation.isPending}
-                label="Keluar dari akun"
-                onPress={() => {
-                  setError('');
-                  void logoutSession().catch(() => setError('Sesi server belum dapat dicabut. Periksa koneksi lalu coba lagi.'));
-                }}
-                variant="secondary"
+                loading={logoutMutation.isPending}
+                onConfirm={() => logoutMutation.mutate()}
               />
             </View>
 

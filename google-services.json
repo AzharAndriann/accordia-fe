@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "981550354786",
+    "project_id": "accordia-project",
+    "storage_bucket": "accordia-project.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:981550354786:android:21ccc4e255d13189df5c3b",
+        "android_client_info": {
+          "package_name": "com.azharandrian.accordia"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlvtH4BxyChleN9ebSSBOdwNMFf5y4ZUs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

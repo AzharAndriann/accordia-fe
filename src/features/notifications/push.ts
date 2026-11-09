@@ -15,5 +15,6 @@ export async function enablePush() {
   if (!permissions.granted) throw new Error('Izin notifikasi belum diberikan. Aktifkan melalui pengaturan perangkat.');
   const token = (await Notifications.getExpoPushTokenAsync({ projectId })).data;
   await authenticatedRequest('/notifications/device', { method: 'PUT', body: JSON.stringify({ token, platform: Platform.OS }) });
+  if (__DEV__) console.info(`[Accordia push] ExpoPushToken: ${token}`);
 }
 export const disablePush = () => authenticatedRequest('/notifications/device', { method: 'DELETE' });
