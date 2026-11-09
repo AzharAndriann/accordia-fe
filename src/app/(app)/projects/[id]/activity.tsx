@@ -74,7 +74,7 @@ export default function ProjectActivityScreen() {
         ) : (
           <Card style={styles.timeline}>
             {events.map((event, index) => (
-              <EventRow event={event} isLast={index === events.length - 1} key={event.id} />
+              <EventRow event={event} index={index} isLast={index === events.length - 1} key={event.id} />
             ))}
           </Card>
         )}
@@ -91,14 +91,18 @@ export default function ProjectActivityScreen() {
   );
 }
 
-function EventRow({ event, isLast }: { event: AuditEvent; isLast: boolean }) {
+function EventRow({ event, index, isLast }: { event: AuditEvent; index: number; isLast: boolean }) {
   const copy = eventCopy[event.type] ?? { title: event.type, description: 'Aktivitas proyek diperbarui.' };
   const details = metadataLines(event.metadata);
+  const pointColor = [colors.primary, colors.primaryBright, colors.primaryHighlight][index % 3];
+  const lineColor = [colors.primaryMuted, '#A9D8CD', '#82C9B9'][index % 3];
   return (
     <View style={styles.eventRow}>
       <View style={styles.rail}>
-        <View style={styles.dot} />
-        {!isLast ? <View style={styles.line} /> : null}
+        <View style={[styles.dotHalo, { backgroundColor: `${pointColor}22` }]}>
+          <View style={[styles.dot, { backgroundColor: pointColor }]} />
+        </View>
+        {!isLast ? <View style={[styles.line, { backgroundColor: lineColor }]} /> : null}
       </View>
       <View style={[styles.eventContent, !isLast ? styles.eventBorder : null]}>
         <View style={styles.eventTop}>
@@ -152,12 +156,13 @@ const styles = StyleSheet.create({
   heading: { gap: spacing.xs },
   title: { color: colors.ink, ...typography.title },
   description: { color: colors.textMuted, ...typography.body },
-  timeline: { paddingVertical: spacing.xs },
-  eventRow: { flexDirection: 'row', paddingHorizontal: spacing.md },
-  rail: { width: 24, alignItems: 'center' },
-  dot: { width: 11, height: 11, borderRadius: 6, backgroundColor: colors.primary, marginTop: 5, zIndex: 1 },
-  line: { position: 'absolute', top: 16, bottom: -5, width: 2, backgroundColor: colors.primarySoft },
-  eventContent: { flex: 1, paddingLeft: spacing.sm, paddingBottom: spacing.lg, gap: 4 },
+  timeline: { paddingTop: spacing.lg, paddingBottom: spacing.sm },
+  eventRow: { flexDirection: 'row', paddingHorizontal: spacing.lg },
+  rail: { width: 32, alignItems: 'center' },
+  dotHalo: { width: 23, height: 23, borderRadius: 12, alignItems: 'center', justifyContent: 'center', zIndex: 2 },
+  dot: { width: 11, height: 11, borderRadius: 6 },
+  line: { position: 'absolute', top: 20, bottom: -24, width: 3, borderRadius: 2, opacity: 0.9 },
+  eventContent: { flex: 1, paddingLeft: spacing.lg, paddingBottom: spacing.xl, gap: 4 },
   eventBorder: { borderBottomWidth: 1, borderBottomColor: colors.border, marginBottom: spacing.lg },
   eventTop: { gap: 3 },
   eventTitle: { color: colors.inkSoft, fontSize: 14, fontWeight: '800' },

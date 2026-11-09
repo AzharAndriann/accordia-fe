@@ -52,19 +52,34 @@ export default function ProjectDetailScreen() {
     { label: 'Penyerahan', description: 'Hasil kerja dan revisi', route: 'deliveries' },
     { label: 'Pembayaran', description: 'Riwayat dan bukti pembayaran', route: 'payments' },
     { label: 'Pembatalan & sengketa', description: 'Permintaan dan solusi bersama', route: 'requests' },
-    { label: 'Aktivitas', description: 'Riwayat perubahan proyek', route: 'activity' },
   ];
 
   return (
     <SafeAreaView edges={['bottom']} style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.hero}>
+          <View pointerEvents="none" style={styles.heroGlowLarge} />
+          <View pointerEvents="none" style={styles.heroGlowSmall} />
+          <View pointerEvents="none" style={styles.heroSweep} />
           <View style={styles.heroTop}>
             <ProjectStatusBadge status={project.status} />
             <Text style={styles.role}>{projectRoleLabel(project.role)}</Text>
           </View>
           <Text style={styles.title}>{project.title}</Text>
-          <Text style={styles.date}>Diperbarui {formatProjectDate(project.updatedAt)}</Text>
+          <View style={styles.heroFooter}>
+            <View style={styles.heroMetric}>
+              <Text style={styles.heroMetricLabel}>DIPERBARUI</Text>
+              <Text style={styles.heroMetricValue}>{formatProjectDate(project.updatedAt)}</Text>
+            </View>
+            <View style={[styles.heroMetric, styles.heroMetricRight]}>
+              <Text style={styles.heroMetricLabel}>KESEPAKATAN</Text>
+              <Text style={styles.heroMetricValue}>{project.activeAgreementVersionId ? 'Aktif' : 'Belum ada'}</Text>
+            </View>
+          </View>
+          <View pointerEvents="none" style={styles.heroCoins}>
+            <View style={styles.heroCoinGold} />
+            <View style={styles.heroCoinMint} />
+          </View>
         </View>
 
         <View style={styles.section}>
@@ -72,16 +87,21 @@ export default function ProjectDetailScreen() {
           <Text style={styles.description}>{project.description}</Text>
         </View>
 
-        <View style={styles.metaRow}>
-          <View style={styles.metaCard}>
-            <Text style={styles.metaLabel}>Dibuat</Text>
-            <Text style={styles.metaValue}>{formatProjectDate(project.createdAt)}</Text>
+        <Pressable
+          accessibilityLabel="Lihat aktivitas proyek"
+          accessibilityRole="button"
+          onPress={() => router.push(`/(app)/projects/${project.id}/activity`)}
+          style={({ pressed }) => [styles.activityButton, pressed ? styles.pressed : null]}
+        >
+          <View style={styles.activityIcon}>
+            <ActivityTimelineIcon />
           </View>
-          <View style={styles.metaCard}>
-            <Text style={styles.metaLabel}>Kesepakatan aktif</Text>
-            <Text style={styles.metaValue}>{project.activeAgreementVersionId ? 'Tersedia' : 'Belum ada'}</Text>
+          <View style={styles.activityCopy}>
+            <Text style={styles.activityTitle}>Lihat aktivitas proyek</Text>
+            <Text style={styles.activityDescription}>Telusuri perubahan dan keputusan secara berurutan</Text>
           </View>
-        </View>
+          <Text style={styles.activityArrow}>›</Text>
+        </Pressable>
 
         <View style={styles.actionSection}>
           <Text style={styles.sectionLabel}>KELOLA PROYEK</Text>
@@ -105,6 +125,17 @@ export default function ProjectDetailScreen() {
   );
 }
 
+function ActivityTimelineIcon() {
+  return (
+    <View accessible={false} style={styles.timelineGlyph}>
+      <View style={styles.timelineGlyphLine} />
+      <View style={[styles.timelineGlyphDot, styles.timelineGlyphDotTop]} />
+      <View style={[styles.timelineGlyphDot, styles.timelineGlyphDotMiddle]} />
+      <View style={[styles.timelineGlyphDot, styles.timelineGlyphDotBottom]} />
+    </View>
+  );
+}
+
 function ProjectState({ message, onRetry }: { message: string; onRetry?: () => void }) {
   return (
     <SafeAreaView style={styles.stateSafeArea}>
@@ -122,18 +153,51 @@ function ProjectState({ message, onRetry }: { message: string; onRetry?: () => v
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: colors.background },
   content: { padding: 20, paddingBottom: 40, gap: 16 },
-  hero: { borderRadius: 24, backgroundColor: colors.primary, padding: 22, gap: 12, overflow: 'hidden' },
+  hero: { minHeight: 220, borderRadius: 28, backgroundColor: colors.inkDeep, padding: 22, gap: 14, overflow: 'hidden', justifyContent: 'space-between' },
+  heroGlowLarge: { position: 'absolute', width: 230, height: 230, borderRadius: 115, right: -78, top: -105, backgroundColor: colors.primary },
+  heroGlowSmall: { position: 'absolute', width: 145, height: 145, borderRadius: 73, right: -30, top: -55, borderWidth: 22, borderColor: colors.primaryAccent, opacity: 0.34 },
+  heroSweep: { position: 'absolute', width: 420, height: 145, borderRadius: 210, left: -105, bottom: -96, backgroundColor: colors.primaryBright, opacity: 0.52, transform: [{ rotate: '-6deg' }] },
   heroTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   role: { color: colors.primaryMuted, fontSize: 12, fontWeight: '700' },
-  title: { color: colors.white, fontSize: 27, lineHeight: 34, fontWeight: '800', letterSpacing: -0.6 },
-  date: { color: colors.primaryMuted, fontSize: 12 },
+  title: { color: colors.white, fontSize: 30, lineHeight: 37, fontWeight: '800', letterSpacing: -0.7, maxWidth: '84%' },
+  heroFooter: { flexDirection: 'row', alignItems: 'flex-end', paddingTop: 18, paddingRight: 52 },
+  heroMetric: { flex: 1, gap: 4 },
+  heroMetricRight: { alignItems: 'flex-end' },
+  heroMetricLabel: { color: colors.primaryHighlight, fontSize: 9, fontWeight: '900', letterSpacing: 1.25 },
+  heroMetricValue: { color: colors.white, fontSize: 12, fontWeight: '700' },
+  heroCoins: { position: 'absolute', right: 18, bottom: 19, width: 42, height: 24 },
+  heroCoinGold: { position: 'absolute', left: 0, width: 24, height: 24, borderRadius: 12, backgroundColor: colors.gold, opacity: 0.95 },
+  heroCoinMint: { position: 'absolute', right: 0, width: 24, height: 24, borderRadius: 12, backgroundColor: colors.primaryHighlight, opacity: 0.95 },
   section: { borderWidth: 1, borderColor: colors.border, borderRadius: 20, backgroundColor: colors.white, padding: 18, gap: 10 },
   sectionLabel: { color: colors.primaryAccent, fontSize: 11, fontWeight: '800', letterSpacing: 1.35 },
   description: { color: colors.text, fontSize: 15, lineHeight: 23 },
-  metaRow: { flexDirection: 'row', gap: 12 },
-  metaCard: { flex: 1, minHeight: 92, borderWidth: 1, borderColor: colors.border, borderRadius: 18, backgroundColor: colors.white, padding: 15, gap: 8 },
-  metaLabel: { color: colors.textSubtle, fontSize: 11, lineHeight: 15 },
-  metaValue: { color: colors.inkSoft, fontSize: 13, lineHeight: 18, fontWeight: '800' },
+  activityButton: {
+    minHeight: 82,
+    borderRadius: 19,
+    backgroundColor: colors.inkDeep,
+    padding: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 13,
+  },
+  activityIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 16,
+    backgroundColor: colors.primaryBright,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  timelineGlyph: { width: 26, height: 30 },
+  timelineGlyphLine: { position: 'absolute', left: 12, top: 4, bottom: 4, width: 2, borderRadius: 1, backgroundColor: colors.primaryMuted },
+  timelineGlyphDot: { position: 'absolute', left: 8, width: 10, height: 10, borderRadius: 5, borderWidth: 2, borderColor: colors.white, backgroundColor: colors.primaryBright },
+  timelineGlyphDotTop: { top: 0 },
+  timelineGlyphDotMiddle: { top: 10 },
+  timelineGlyphDotBottom: { top: 20 },
+  activityCopy: { flex: 1, gap: 3 },
+  activityTitle: { color: colors.white, fontSize: 15, lineHeight: 20, fontWeight: '800' },
+  activityDescription: { color: colors.primaryMuted, fontSize: 11, lineHeight: 16 },
+  activityArrow: { color: colors.primaryHighlight, fontSize: 28, lineHeight: 30 },
   actionSection: { gap: 10, marginTop: 4 },
   actionCard: { borderWidth: 1, borderColor: colors.border, borderRadius: 17, backgroundColor: colors.white, paddingHorizontal: 17, paddingVertical: 14, flexDirection: 'row', alignItems: 'center', gap: 12 },
   pressed: { opacity: 0.76 },

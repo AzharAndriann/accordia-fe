@@ -54,8 +54,6 @@ export default function InviteClientScreen() {
     initialPageParam: undefined as string | undefined,
     getNextPageParam: (page) => page.nextCursor ?? undefined,
     enabled: Boolean(projectId),
-    refetchOnMount: 'always',
-    staleTime: 0,
   });
   const invitations = invitationsQuery.data?.pages.flatMap((page) => page.data) ?? [];
   const refreshLists = () => Promise.all([
@@ -289,7 +287,7 @@ function InvitationItem({
         <Text style={styles.dateText}>Dikirim {formatDate(invitation.createdAt)}</Text>
         <Text style={styles.dateText}>{getActivityDate(invitation)}</Text>
       </View>
-      {invitation.status === 'PENDING' ? <ActionButton label="Bagikan tautan undangan" variant="secondary" onPress={() => { void Share.share({ message: `Buka undangan Accordia: accordia:///invitations/${invitation.id}`, url: `accordia:///invitations/${invitation.id}` }); }} /> : null}
+      {invitation.status === 'PENDING' ? <ActionButton label="Bagikan tautan undangan" variant="secondary" onPress={() => { void Share.share({ message: `Buka undangan Accordia: accordia:///invitations/${invitation.id}` }); }} /> : null}
       {invitation.status === 'PENDING' ? (
         <ActionButton
           label={cancelling ? 'Membatalkan...' : 'Batalkan undangan'}

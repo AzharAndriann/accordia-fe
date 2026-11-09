@@ -19,15 +19,11 @@ export default function HomeScreen() {
     queryKey: [...invitationKeys.pending(), 'preview'],
     queryFn: () => listPendingInvitations(undefined, 20),
     enabled: currentUser?.role === 'CLIENT',
-    refetchOnMount: 'always',
-    staleTime: 0,
   });
   const removalsQuery = useQuery({
     queryKey: [...invitationKeys.removals(), 'preview'],
     queryFn: () => listMembershipRemovalRequests(undefined, 20),
     enabled: currentUser?.role === 'CLIENT',
-    refetchOnMount: 'always',
-    staleTime: 0,
   });
   const invitationCount = (invitationsQuery.data?.data.length ?? 0)
     + (removalsQuery.data?.data.length ?? 0);

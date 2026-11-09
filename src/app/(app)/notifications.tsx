@@ -39,8 +39,6 @@ export default function NotificationsScreen() {
     queryFn: ({ pageParam }) => listPendingInvitations(pageParam),
     initialPageParam: undefined as string | undefined,
     getNextPageParam: (page) => page.nextCursor ?? undefined,
-    refetchOnMount: 'always',
-    staleTime: 0,
   });
   const invitations = invitationsQuery.data?.pages.flatMap((page) => page.data) ?? [];
   const removalsQuery = useInfiniteQuery({
@@ -48,8 +46,6 @@ export default function NotificationsScreen() {
     queryFn: ({ pageParam }) => listMembershipRemovalRequests(pageParam),
     initialPageParam: undefined as string | undefined,
     getNextPageParam: (page) => page.nextCursor ?? undefined,
-    refetchOnMount: 'always',
-    staleTime: 0,
   });
   const removals = removalsQuery.data?.pages.flatMap((page) => page.data) ?? [];
   const acceptMutation = useMutation({
