@@ -44,5 +44,5 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   dot: { width: 6, height: 6, borderRadius: 3 },
-  text: { fontSize: 12, fontWeight: '800' },
+  text: { fontSize: 12, fontWeight: '700' },
 });

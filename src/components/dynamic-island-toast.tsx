@@ -67,14 +67,14 @@ export function DynamicIslandToast() {
 
   if (!toast) return null;
 
-  const expandedWidth = Math.min(width - 32, 390);
+  const expandedWidth = Math.min(width - 48, 330);
   const shellWidth = progress.interpolate({
     inputRange: [0, 1],
-    outputRange: [126, expandedWidth],
+    outputRange: [118, expandedWidth],
   });
   const shellHeight = progress.interpolate({
     inputRange: [0, 1],
-    outputRange: [37, 72],
+    outputRange: [35, 64],
   });
   const contentOpacity = progress.interpolate({
     inputRange: [0, 0.42, 1],
@@ -90,7 +90,7 @@ export function DynamicIslandToast() {
       accessibilityLabel={`${toast.title}. ${toast.message}`}
       accessibilityLiveRegion="polite"
       pointerEvents="none"
-      style={[styles.overlay, { top: Math.max(8, insets.top - 51) }]}
+      style={[styles.overlay, { top: Math.max(9, insets.top - 46) }]}
     >
       <Animated.View style={[styles.shell, { height: shellHeight, width: shellWidth }]}>
         <Animated.View
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     elevation: 20,
   },
   shell: {
-    borderRadius: 38,
+    borderRadius: 32,
     backgroundColor: colors.black,
     justifyContent: 'flex-end',
     overflow: 'hidden',
@@ -136,18 +136,18 @@ const styles = StyleSheet.create({
     shadowRadius: 15,
   },
   content: {
-    height: 72,
+    height: 64,
     flexDirection: 'row',
     alignItems: 'flex-end',
-    gap: 11,
-    paddingHorizontal: 18,
-    paddingTop: 29,
-    paddingBottom: 11,
+    gap: 10,
+    paddingHorizontal: 15,
+    paddingTop: 22,
+    paddingBottom: 9,
   },
   icon: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    width: 26,
+    height: 26,
+    borderRadius: 13,
     backgroundColor: colors.primaryHighlight,
   },
   checkStem: {
@@ -156,8 +156,8 @@ const styles = StyleSheet.create({
     height: 9,
     borderRadius: 2,
     backgroundColor: colors.white,
-    left: 9,
-    top: 11,
+    left: 8,
+    top: 10,
     transform: [{ rotate: '-43deg' }],
   },
   checkArm: {
@@ -166,11 +166,11 @@ const styles = StyleSheet.create({
     height: 14,
     borderRadius: 2,
     backgroundColor: colors.white,
-    left: 16,
-    top: 7,
+    left: 15,
+    top: 6,
     transform: [{ rotate: '42deg' }],
   },
   copy: { flex: 1, justifyContent: 'center' },
-  title: { color: colors.white, fontSize: 13, lineHeight: 17, fontWeight: '800' },
-  message: { color: colors.navInactive, fontSize: 10, lineHeight: 14, marginTop: 1 },
+  title: { color: colors.white, fontSize: 12, lineHeight: 16, fontWeight: '700' },
+  message: { color: colors.navInactive, fontSize: 9.5, lineHeight: 13, marginTop: 1 },
 });
