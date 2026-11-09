@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { Link , useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { InlineNotice } from '@/components/ui';
 import { LogoutButton } from '@/components/logout-button';
 import { logoutSession } from '@/features/auth/auth.api';
 import { useQueryClient } from '@tanstack/react-query';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { projectRoleLabel } from '@/features/projects';
@@ -58,8 +58,25 @@ export default function AccountScreen() {
           </View>
         </View>
 
-        <Link href="/policies" style={{ color: colors.primary }}>Syarat penggunaan dan kebijakan privasi</Link>
-        <Link href="/(app)/notification-settings" style={{ color: colors.primary }}>Pengaturan notifikasi</Link>
+        <View style={styles.accountSection}>
+          <Text style={styles.sectionLabel}>PREFERENSI AKUN</Text>
+          <Pressable
+            accessibilityHint="Membuka pengaturan aplikasi"
+            accessibilityRole="button"
+            onPress={() => router.push('/(app)/settings')}
+            style={({ pressed }) => [styles.settingsCard, pressed ? styles.pressed : null]}
+          >
+            <View style={styles.settingsIcon}>
+              <Text style={styles.settingsIconText}>⚙︎</Text>
+            </View>
+            <View style={styles.settingsCopy}>
+              <Text style={styles.settingsTitle}>Pengaturan</Text>
+              <Text style={styles.settingsDescription}>Notifikasi, syarat penggunaan, dan privasi</Text>
+            </View>
+            <Text style={styles.chevron}>›</Text>
+          </Pressable>
+        </View>
+
         {logoutError ? <InlineNotice tone="error">{logoutError}</InlineNotice> : null}
         <LogoutButton loading={loggingOut} onConfirm={() => void logout()} variant="card" />
 
@@ -86,4 +103,31 @@ const styles = StyleSheet.create({
   divider: { height: 1, backgroundColor: colors.divider },
   infoLabel: { color: colors.textMuted, fontSize: 13 },
   infoValue: { color: colors.inkSoft, fontSize: 13, fontWeight: '800' },
+  accountSection: { gap: 9 },
+  sectionLabel: { color: colors.primaryAccent, fontSize: 10, fontWeight: '800', letterSpacing: 1.4, marginLeft: 3 },
+  settingsCard: {
+    minHeight: 82,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 19,
+    backgroundColor: colors.white,
+    padding: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 13,
+  },
+  pressed: { opacity: 0.76, transform: [{ scale: 0.99 }] },
+  settingsIcon: {
+    width: 50,
+    height: 50,
+    borderRadius: 17,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.primarySoft,
+  },
+  settingsIconText: { color: colors.primary, fontSize: 27, lineHeight: 31, fontWeight: '700' },
+  settingsCopy: { flex: 1, gap: 3 },
+  settingsTitle: { color: colors.inkSoft, fontSize: 16, lineHeight: 21, fontWeight: '800' },
+  settingsDescription: { color: colors.textMuted, fontSize: 12, lineHeight: 17 },
+  chevron: { color: colors.primaryAccent, fontSize: 30, lineHeight: 32, fontWeight: '400' },
 });

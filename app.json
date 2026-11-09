@@ -4,25 +4,27 @@
     "slug": "accordia",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/accordia-app-icon.png",
     "scheme": "accordia",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon",
+      "icon": "./assets/images/accordia-app-icon.png",
       "bundleIdentifier": "com.azharandrian.accordia",
+      "entitlements": {
+        "aps-environment": "development"
+      },
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "backgroundColor": "#0B4438",
+        "foregroundImage": "./assets/images/accordia-app-icon-foreground.png"
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.azharandrian.accordia",
+      "versionCode": 3,
       "googleServicesFile": "./google-services.json"
     },
     "web": {
@@ -42,6 +44,14 @@
       "expo-secure-store",
       "expo-sharing",
       "expo-status-bar",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ],
       [
         "expo-notifications",
         {

@@ -1,9 +1,10 @@
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
+import { useState } from 'react';
 import { ActivityIndicator, Alert, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { ActionButton, Card, EmptyState, InlineNotice, SectionLabel } from '@/components/ui';
+import { ActionButton, Card, EmptyState, Field, InlineNotice, SectionLabel } from '@/components/ui';
 import {
   acceptInvitation,
   invitationKeys,
@@ -15,11 +16,24 @@ import {
 } from '@/features/invitations';
 import { projectKeys } from '@/features/projects';
 import { ApiError } from '@/lib/api';
+import { invitationIdFromInput } from '@/lib/invitation-route';
 import { colors, radii, spacing, typography } from '@/theme';
 
 export default function NotificationsScreen() {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const [invitationInput, setInvitationInput] = useState('');
+  const [invitationInputError, setInvitationInputError] = useState<string>();
+  const openInvitation = () => {
+    const invitationId = invitationIdFromInput(invitationInput);
+    if (!invitationId) {
+      setInvitationInputError('Masukkan tautan undangan Accordia atau ID undangan yang valid.');
+      return;
+    }
+
+    setInvitationInputError(undefined);
+    router.push(`/invitations/${invitationId}`);
+  };
   const invitationsQuery = useInfiniteQuery({
     queryKey: invitationKeys.pending(),
     queryFn: ({ pageParam }) => listPendingInvitations(pageParam),
@@ -102,6 +116,39 @@ export default function NotificationsScreen() {
           <Text style={styles.title}>Undangan proyek</Text>
           <Text style={styles.description}>Terima undangan untuk memasukkan proyek ke ruang kerjamu.</Text>
         </View>
+
+        <Card style={styles.invitationInputCard}>
+          <View style={styles.invitationInputHeading}>
+            <View style={styles.linkIcon}>
+              <Text style={styles.linkIconText}>↗</Text>
+            </View>
+            <View style={styles.invitationInputCopy}>
+              <Text style={styles.invitationInputTitle}>Punya tautan undangan?</Text>
+              <Text style={styles.invitationInputDescription}>
+                Tempel tautan atau ID undangan untuk membukanya langsung.
+              </Text>
+            </View>
+          </View>
+          <Field
+            autoCapitalize="none"
+            autoCorrect={false}
+            error={invitationInputError}
+            label="Tautan atau ID undangan"
+            onChangeText={(value) => {
+              setInvitationInput(value);
+              if (invitationInputError) setInvitationInputError(undefined);
+            }}
+            onSubmitEditing={openInvitation}
+            placeholder="accordia:///invitations/..."
+            returnKeyType="go"
+            value={invitationInput}
+          />
+          <ActionButton
+            disabled={!invitationInput.trim()}
+            label="Buka undangan"
+            onPress={openInvitation}
+          />
+        </Card>
 
         {errorMessage ? <InlineNotice tone="error">{errorMessage}</InlineNotice> : null}
 
@@ -282,6 +329,20 @@ const styles = StyleSheet.create({
   heading: { gap: spacing.xs },
   title: { color: colors.ink, ...typography.title },
   description: { color: colors.textMuted, ...typography.body },
+  invitationInputCard: { gap: spacing.lg },
+  invitationInputHeading: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
+  linkIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: radii.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.primarySoft,
+  },
+  linkIconText: { color: colors.primary, fontSize: 23, lineHeight: 25, fontWeight: '800' },
+  invitationInputCopy: { flex: 1, gap: 2 },
+  invitationInputTitle: { color: colors.inkSoft, fontSize: 16, lineHeight: 21, fontWeight: '800' },
+  invitationInputDescription: { color: colors.textMuted, fontSize: 12, lineHeight: 18 },
   list: { gap: spacing.md },
   section: { gap: spacing.md },
   sectionHeading: { gap: 3 },

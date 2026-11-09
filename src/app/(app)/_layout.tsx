@@ -40,6 +40,7 @@ export default function AppLayout() {
     <View style={{ flex: 1 }}>
       <Stack>
         <Stack.Screen name="index" options={{ ...tabOptions, title: 'Beranda' }} />
+        <Stack.Screen name="settings" options={{ header: () => renderHeader('Pengaturan'), title: 'Pengaturan' }} />
         <Stack.Screen name="notification-settings" options={{ header: () => renderHeader('Notifikasi perangkat'), title: 'Notifikasi perangkat' }} />
         <Stack.Screen name="projects/[id]/requests" options={{ header: () => renderHeader('Pembatalan & sengketa'), title: 'Pembatalan & sengketa' }} />
         <Stack.Screen name="account" options={{ ...tabOptions, title: 'Akun' }} />

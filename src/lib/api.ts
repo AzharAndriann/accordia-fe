@@ -56,17 +56,29 @@ export async function apiRequest<T>(
     requestToken = (await refreshAccessToken()) ?? undefined;
     if (!requestToken) throw new ApiError(getAccessToken() ? 0 : 401, 'SESSION_REFRESH_FAILED', 'Sesi belum dapat diperbarui. Coba lagi.');
   }
-  const send = (token?: string) => {
+  const send = async (token?: string) => {
     if (accessToken && getSessionEpoch() !== epoch) throw new ApiError(401, 'SESSION_CHANGED', 'Sesi telah berubah');
-    return fetch(`${getApiBaseUrl()}${path}`, {
-      ...requestOptions,
-      headers: {
-        Accept: 'application/json',
-        ...(requestOptions.body && !isFormData ? { 'Content-Type': 'application/json' } : {}),
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        ...headers,
-      },
-    });
+    const url = `${getApiBaseUrl()}${path}`;
+    try {
+      return await fetch(url, {
+        ...requestOptions,
+        headers: {
+          Accept: 'application/json',
+          ...(requestOptions.body && !isFormData ? { 'Content-Type': 'application/json' } : {}),
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          ...headers,
+        },
+      });
+    } catch (cause) {
+      const detail = cause instanceof Error ? cause.message : 'Network request failed';
+      throw new ApiError(
+        0,
+        'NETWORK_ERROR',
+        __DEV__
+          ? `Tidak dapat menghubungi ${url}. Detail: ${detail}`
+          : 'Tidak dapat terhubung ke server. Periksa koneksi lalu coba lagi.',
+      );
+    }
   };
   let response = await send(requestToken);
   if (response.status === 401 && requestToken && path !== '/auth/refresh') {
